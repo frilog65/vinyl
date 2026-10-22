@@ -496,6 +496,49 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
 .vw{display:flex;gap:8px;flex-wrap:wrap}
 .vw button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);font:600 14px var(--f-body);cursor:pointer}
 .vw button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+
+/* ---------- record preview: a sheet from the bottom ---------- */
+.view-btn{display:none!important}
+.np-top-k{visibility:hidden}
+.pv-wrap{position:fixed;inset:0;z-index:45;background:rgba(10,9,8,.62);opacity:0;transition:opacity .28s}
+.pv-wrap.show{opacity:1}
+.pv{position:absolute;left:0;right:0;bottom:0;height:min(660px,calc(100% - 70px - env(safe-area-inset-top,0px)));box-sizing:border-box;display:grid;grid-template-columns:auto minmax(0,1fr);gap:0 clamp(28px,4vw,64px);
+  padding:52px max(40px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(40px,env(safe-area-inset-left,0px));
+  background:#141316;border-top:1px solid #2c2b2f;border-radius:28px 28px 0 0;box-shadow:0 -30px 80px rgba(0,0,0,.6);transform:translateY(102%);transition:transform .38s cubic-bezier(.2,.8,.2,1);overflow:hidden}
+.pv-wrap.show .pv{transform:none}
+.pv.dragging{transition:none}
+.pv-grip{position:absolute;left:0;right:0;top:0;height:40px;cursor:grab;touch-action:none}
+.pv-grip::after{content:"";position:absolute;left:50%;top:10px;width:48px;height:5px;border-radius:99px;background:#3a393e;transform:translateX(-50%)}
+.pv-close{position:absolute;right:max(24px,env(safe-area-inset-right,0px));top:18px;z-index:2;background:#1b1a1d;border-color:#2a2a2e}
+.pv-left{display:flex;flex-direction:column;gap:20px;min-width:0}
+.pv-art{position:relative;--cs:min(46vh,400px);width:calc(var(--cs)*1.48);height:var(--cs);max-width:100%}
+.pv-cov{position:absolute;left:0;top:0;width:var(--cs);height:var(--cs);z-index:2;border-radius:3px;overflow:hidden;container-type:inline-size;--u:1cqw;box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.08)}
+.pv-rec{inset:auto;left:calc(var(--cs)*.46);top:3%;width:calc(var(--cs)*.94);height:calc(var(--cs)*.94);z-index:1;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.pv .spin{animation:pvspin 1.8s linear infinite}
+@keyframes pvspin{to{transform:rotate(360deg)}}
+.pv-now{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:14px;background:#1b1a1d;border:1px solid #2a2a2e;max-width:calc(var(--cs,360px)*1.1)}
+.pv-now .vrec{position:relative;inset:auto;width:36px;height:36px;flex:none}
+.pv-now small{display:block;font:500 10px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#8f8a83;margin-bottom:5px}
+.pv-now b{font-weight:600;font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-right{display:flex;flex-direction:column;gap:18px;min-width:0;min-height:0}
+.pv-meta{display:grid;gap:8px}
+.pv-meta .kicker{color:#d6b26a}
+.pv-meta h2{margin:0;font:400 clamp(26px,3.2vw,42px)/1.05 var(--f-disp);text-wrap:balance;overflow-wrap:break-word}
+.pv-meta p{margin:0;font-size:17px;font-weight:500;color:#8f8a83}
+.pv-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn.go{min-height:54px;padding:0 24px;border:0;background:linear-gradient(180deg,#f0d391,#c99f52);color:#1a1408;font-weight:700;font-size:15px;box-shadow:0 12px 30px rgba(214,178,106,.22)}
+.btn.go:hover{filter:brightness(1.05)}
+.pv-btns{flex-wrap:nowrap}.pv-btns .btn:not(.go){width:54px;height:54px;min-height:54px;flex:none;background:#1b1a1d;border-color:#2a2a2e}.pv-save[aria-pressed=true]{color:#d6b26a}.pv-save.armed{border-color:#d6b26a!important}.pv-save svg{width:20px;height:20px}
+.pv .tl{max-height:none;flex:1;min-height:0;align-content:start;-webkit-mask-image:linear-gradient(180deg,#000 88%,rgba(0,0,0,0));mask-image:linear-gradient(180deg,#000 88%,rgba(0,0,0,0));padding-bottom:30px}
+.pv .trk{font-size:15px}
+@media (max-width:760px),(orientation:portrait){
+  .pv{grid-template-columns:1fr;gap:18px;padding:40px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));overflow:auto;height:calc(100% - 60px - env(safe-area-inset-top,0px))}
+  .pv-art{--cs:min(48vw,240px)}
+  .pv-right{min-height:auto}
+  .pv .btn.go{flex:1;justify-content:center;padding:0 14px;font-size:14px;white-space:nowrap}
+  .pv .tl{-webkit-mask-image:none;mask-image:none;overflow:visible}
+  .pv-close{top:14px;right:14px}
+}
 </style>
 </head>
 <body>
@@ -511,7 +554,7 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
     <div class="actions">
       <form class="sbox" id="sf" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
-        <input type="search" id="sq" placeholder="Найти альбом в Spotify" aria-label="Найти альбом в Spotify" autocomplete="off" enterkeyhint="search">
+        <input type="search" id="sq" placeholder="Найти альбом" aria-label="Найти альбом" autocomplete="off" enterkeyhint="search">
       </form>
       <button class="btn icon" id="dev-btn" type="button" aria-label="Где играет музыка и настройки">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2.5"/><circle cx="12" cy="14" r="3"/><path d="M12 7.5h.01"/></svg>
@@ -582,6 +625,7 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
   </div>
 </div>
 
+<div class="pv-wrap" id="pv" lang="ru" hidden></div>
 <div class="sheet-wrap" id="sheet" lang="ru" hidden></div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -997,7 +1041,7 @@ let cur=0,target=0,raf=0,slots=[],S=200,lastCap=-1,shelfMsg='';
 const items=()=>lib[mode]||[];
 const PHONE_MQ=window.matchMedia('(max-width: 600px) and (orientation: portrait)');
 let phoneView=LS.get('sv.phoneview','big')==='crate'?'crate':'big';
-const lay=()=>PHONE_MQ.matches?phoneView:'wide';
+const lay=()=>PHONE_MQ.matches?'big':'wide';
 function sizeStage(){
   const h=stage.clientHeight,w=stage.clientWidth,L=lay();
   if(L==='big')S=Math.round(Math.max(150,Math.min(w*.76,h*.56)));
@@ -1074,7 +1118,7 @@ function renderCaption(i){
   const n=T(r).length||r.total;if(n)bits.push(`<span>${n} ${plural(n,'трек','трека','треков')}${recDur(r)?' · '+fmtLong(recDur(r)):''}</span>`);
   if(r.kind==='playlist')bits.push('<span class="chip mine">плейлист</span>');
   else if(mode==='search'&&isSaved(r))bits.push('<span class="chip mine">на полке</span>');
-  caption.innerHTML=`<p class="cap-title">${esc(r.title)}</p><p class="cap-meta">${bits.join('<span aria-hidden="true">·</span>')}</p><p class="hint">${lay()==='crate'?`${i+1} из ${items().length} · тап по передней пластинке открывает проигрыватель`:lay()==='big'?`${i+1} из ${items().length} · тап по пластинке открывает проигрыватель`:'Листай свайпом. Тап по пластинке в центре открывает проигрыватель'}</p>`;
+  caption.innerHTML=`<p class="cap-title">${esc(r.title)}</p><p class="cap-meta">${bits.join('<span aria-hidden="true">·</span>')}</p>`;
 }
 let tilt=0,prevCur=0,fingerN=0,fingerS=0,gI=0;
 function tick(){
@@ -1096,7 +1140,7 @@ stage.addEventListener('pointerdown',e=>{if(!items().length||e.button>0)return;d
 stage.addEventListener('pointermove',e=>{if(!dragging)return;const p=axis(e),dx=p-sx;if(Math.abs(dx)>7)moved=true;fingerAt(e);
   const unit=lay()==='crate'?S*.38:S*.5;cur=clamp(scur-dx/unit,-.45,items().length-.55);const now=performance.now(),dt=Math.max(1,now-lt);vel=.7*vel+.3*(-(p-lx)/unit)/(dt/1000);lx=p;lt=now;});
 function endDrag(){if(!dragging)return;dragging=false;const n=items().length;
-  if(!moved&&downSlot){const i=+downSlot.dataset.i;if(i===Math.round(cur)){target=i;openTT(items()[i]);}else target=i;}
+  if(!moved&&downSlot){const i=+downSlot.dataset.i;if(i===Math.round(cur)){target=i;openItem(items()[i]);}else target=i;}
   else target=clamp(Math.round(cur+clamp(vel,-14,14)*.16),0,n-1);downSlot=null;kick();}
 stage.addEventListener('pointerup',endDrag);stage.addEventListener('pointercancel',endDrag);
 let wheelAcc=0;
@@ -1130,11 +1174,13 @@ function closeDrawer(){if(!dr.open)return;dr.open=false;drawer.classList.remove(
 tt.addEventListener('pointerdown',e=>{if(tt.classList.contains('idle')){swallow=true;e.stopPropagation();}poke();},true);
 tt.addEventListener('click',e=>{if(swallow){swallow=false;e.stopPropagation();e.preventDefault();return;}if(dr.open&&!e.target.closest('#tt-drawer')&&!e.target.closest('#c-list'))closeDrawer();},true);
 tt.addEventListener('pointermove',e=>{if(e.pointerType==='mouse')poke();},{passive:true});
-function openTT(r){
+function openItem(r){if(player.rec===r)openTT(r);else openPreview(r);}
+function openTT(r,playIdx){
   viewRec=r;closeDrawer();renderInfo();tt.hidden=false;updateMini();poke();
   requestAnimationFrame(()=>requestAnimationFrame(()=>tt.classList.add('show')));
   setTimeout(()=>{const b=$('#c-play');b&&b.focus({preventScroll:true});},60);
   ensureTracks(r).then(()=>{if(viewRec!==r)return;renderInfo();
+    if(playIdx!=null){if(player.rec===r){if(!player.busy)cueAndPlay(playIdx);}else setTimeout(()=>{if(viewRec===r&&!tt.hidden)swapRecord(r,playIdx);},300);return;}
     if(!player.playing&&!player.busy&&player.rec!==r)setTimeout(()=>{if(viewRec===r&&!tt.hidden&&!player.playing&&!player.busy&&player.rec!==r)swapRecord(r,null);},300);
   }).catch(e=>{if(viewRec===r)toast(apiErr(e));});
 }
@@ -1185,6 +1231,7 @@ function renderInfo(){
 }
 async function toggleSaved(r,btn){
   const on=btn.dataset.on==='1';
+  if(on&&!btn.classList.contains('armed')&&btn.classList.contains('pv-save')){btn.classList.add('armed');toast('Нажми ещё раз, чтобы убрать с полки');setTimeout(()=>{btn.isConnected&&btn.classList.remove('armed');},4000);return;}
   if(on&&!btn.classList.contains('armed')){btn.classList.add('armed');btn.textContent='Нажми ещё раз, чтобы убрать';setTimeout(()=>{if(btn.isConnected&&btn.classList.contains('armed')){btn.classList.remove('armed');btn.textContent='Убрать с полки';}},4000);return;}
   btn.disabled=true;
   try{
@@ -1194,6 +1241,7 @@ async function toggleSaved(r,btn){
     LSJ.set('sv.albums',lib.albums.map(light));
     if(mode==='albums'){renderShelf();}else{$('#n-albums').textContent=lib.albums.length||'';lastCap=-1;place();}
     if(viewRec===r)renderInfo();
+    if(pvRec===r)renderPreview();
   }catch(e){btn.disabled=false;toast(apiErr(e));}
 }
 function updateUI(){updateNow();updateMini();}
@@ -1238,6 +1286,59 @@ function updateNow(){
     const want=on&&player.state==='play'?'<span class="eq"><i></i><i></i><i></i></span>':trackCode(r,i);if(n.innerHTML!==want)n.innerHTML=want;});
 }
 
+
+/* ---------- record preview ---------- */
+const pvWrap=$('#pv');let pvRec=null;
+function openPreview(r){
+  pvRec=r;renderPreview();pvWrap.hidden=false;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>pvWrap.classList.add('show')));
+  ensureTracks(r).then(()=>{if(pvRec===r)renderPreview();}).catch(e=>{if(pvRec===r)toast(apiErr(e));});
+}
+function closePreview(){if(pvWrap.hidden)return;pvWrap.classList.remove('show');const r=pvRec;
+  setTimeout(()=>{if(pvRec!==r)return;pvWrap.hidden=true;pvRec=null;pvWrap.innerHTML='';stage.focus({preventScroll:true});},RM?0:320);}
+function playFromPreview(r,i){closePreview();openTT(r,i);}
+function renderPreview(){
+  const r=pvRec;if(!r)return;
+  const tr=T(r),k=splitOf(r),n=tr.length||r.total,busy=player.rec&&player.rec!==r&&player.state==='play';
+  const meta=[r.kind==='playlist'?'Плейлист':'LP · 33⅓',r.year,n?n+' '+plural(n,'трек','трека','треков'):'',recDur(r)?fmtLong(recDur(r)):''].filter(Boolean).join(' · ');
+  const row=i=>{const t=tr[i],sub=r.comp?`${esc(t.artist)}${t.album?' · '+esc(t.album):''}`:(t.artist&&t.artist!==r.artist?esc(t.artist):'');
+    return `<button class="trk" type="button" data-i="${i}"><span class="n">${trackCode(r,i)}</span><span class="t">${esc(t.title)}${sub?`<small>${sub}</small>`:''}</span><span class="d">${fmt(t.dur)}</span></button>`;};
+  let tl='';
+  if(!r.tracks)tl='<p class="now loading-dots">Загружаю треки</p>';
+  else{tl='<h3>Сторона A</h3>';for(let i=0;i<k;i++)tl+=row(i);if(k<tr.length){tl+='<h3>Сторона B</h3>';for(let i=k;i<tr.length;i++)tl+=row(i);}}
+  const pr=player.rec&&player.rec!==r?player.rec:null,pt=pr&&T(pr)[player.idx];
+  pvWrap.innerHTML=`<div class="pv" role="dialog" aria-modal="true" aria-labelledby="pv-t">
+    <div class="pv-grip" id="pv-grip" aria-hidden="true"></div>
+    <button class="btn icon pv-close" id="pv-close" type="button" aria-label="Закрыть">${X}</button>
+    <div class="pv-left">
+      <div class="pv-art"><div class="vrec pv-rec" id="pv-rec"></div><div class="pv-cov">${art(r)}</div></div>
+      ${pr?`<div class="pv-now"><span class="vrec${player.state==='play'?' spin':''}" id="pv-mini"></span>
+        <div style="min-width:0"><small>${player.state==='play'?'Сейчас играет':'На проигрывателе'}</small><b>${esc(pt?pt.title:pr.title)} · ${esc(pt&&pt.artist?pt.artist:pr.artist||'')}</b></div></div>`:''}
+    </div>
+    <div class="pv-right">
+      <div class="pv-meta"><div class="kicker">${esc(meta)}</div><h2 id="pv-t">${esc(r.title)}</h2>${r.artist?`<p>${esc(r.artist)}</p>`:''}</div>
+      <div class="pv-btns">
+        <button class="btn go" type="button" id="pv-go" ${r.tracks&&tr.length?'':'disabled'}>${ICON.play}${busy?'Сменить пластинку':'Поставить на проигрыватель'}</button>
+        ${r.kind==='album'?`<button class="btn icon pv-save" type="button" id="pv-save" data-on="${isSaved(r)?1:0}" aria-pressed="${isSaved(r)}" aria-label="${isSaved(r)?'Убрать с полки':'Сохранить на полку'}" title="${isSaved(r)?'Убрать с полки':'Сохранить на полку'}"><svg viewBox="0 0 24 24" fill="${isSaved(r)?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 4h12v17l-6-4-6 4z"/></svg></button>`:''}
+      </div>
+      <div class="tl" id="pv-tl">${tl}</div>
+    </div>
+  </div>`;
+  paintRec($('#pv-rec'),r,'A');
+  const pm=$('#pv-mini');if(pm&&pr)paintRec(pm,pr,player.side);
+  $('#pv-close').onclick=closePreview;
+  $('#pv-go').onclick=()=>playFromPreview(r,0);
+  $('#pv-tl').onclick=e=>{const b=e.target.closest('.trk');if(b)playFromPreview(r,+b.dataset.i);};
+  const sv=$('#pv-save');if(sv)sv.onclick=()=>toggleSaved(r,sv);
+  // pull the sheet down to close it
+  const sh=pvWrap.querySelector('.pv'),grip=$('#pv-grip');let y0=null,dy=0;
+  grip.addEventListener('pointerdown',e=>{y0=e.clientY;dy=0;sh.classList.add('dragging');try{grip.setPointerCapture(e.pointerId);}catch(_){}});
+  grip.addEventListener('pointermove',e=>{if(y0==null)return;dy=Math.max(0,e.clientY-y0);sh.style.transform=`translateY(${dy}px)`;});
+  const end=()=>{if(y0==null)return;y0=null;sh.classList.remove('dragging');sh.style.transform='';if(dy>90)closePreview();};
+  grip.addEventListener('pointerup',end);grip.addEventListener('pointercancel',end);
+}
+pvWrap.addEventListener('click',e=>{if(e.target===pvWrap)closePreview();});
+
 /* ---------- mini player ---------- */
 function updateMini(){
   const show=tt.hidden&&!!player.rec&&player.state!=='empty'&&active;
@@ -1262,10 +1363,6 @@ async function openDevices(note){
     <div class="dv-list" id="dv-list"><p class="now loading-dots">Ищу устройства</p></div>
     <div class="btn-row"><button type="button" class="btn" id="dv-ref">Обновить</button><a class="btn" href="intent://#Intent;package=com.spotify.music;end">Открыть Spotify</a></div>
     <div class="hr"></div>
-    <div class="field"><label>Вид полки на телефоне</label><div class="vw" id="dv-view">
-      <button type="button" data-v="big" aria-pressed="${phoneView==='big'}">Карусель</button><button type="button" data-v="crate" aria-pressed="${phoneView==='crate'}">Ящик с пластинками</button></div>
-      <p class="now" style="margin:4px 0 0">Работает, когда телефон держишь вертикально. На планшете и компьютере полка остаётся каруселью.</p></div>
-    <div class="hr"></div>
     <div class="acc"><p id="dv-acc" class="now"></p><button type="button" class="btn danger" id="dv-out">Выйти из Spotify</button></div>
   </div>`);
   const list=$('#dv-list');
@@ -1282,7 +1379,7 @@ async function openDevices(note){
     list.querySelectorAll('.dv').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
     if(player.playing){try{await api('/me/player',{method:'PUT',body:{device_ids:[sp.device],play:true}});toast('Музыка переехала на «'+b.querySelector('span').firstChild.textContent+'»');}catch(err){toast(apiErr(err));}}});
   $('#dv-ref').onclick=load;
-  $('#dv-view').onclick=e=>{const b=e.target.closest('button[data-v]');if(!b)return;$('#dv-view').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setPhoneView(b.dataset.v);};
+
   $('#dv-out').onclick=()=>{closeSheet();closeTT();ejectAll();logout('Ты вышел из Spotify.');};
   $('#dv-acc').innerHTML=lib.me?`Аккаунт Spotify: <b>${esc(lib.me.display_name||lib.me.id)}</b>`:'';
   load();
@@ -1312,10 +1409,11 @@ function drawSnd(){
 $('#snd-btn').onclick=()=>{set.ui=!set.ui;LS.set('sv.ui',set.ui?'on':'off');drawSnd();const c=actx();if(c)AC.sfx.gain.setTargetAtTime(set.ui?1:0,c.currentTime,.02);SFX.beep();};
 document.addEventListener('keydown',e=>{
   if(!sheet.hidden){if(e.key==='Escape')closeSheet();return;}
+  if(!pvWrap.hidden){if(e.key==='Escape')closePreview();return;}
   const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;
   if(!tt.hidden){poke();if(e.key==='Escape'){if(dr.open)closeDrawer();else closeTT();}else if(e.key===' '&&e.target.tagName!=='BUTTON'){mainAction();e.preventDefault();}return;}
   if(e.key==='ArrowRight'||(lay()==='crate'&&e.key==='ArrowDown')){go(1);e.preventDefault();}else if(e.key==='ArrowLeft'||(lay()==='crate'&&e.key==='ArrowUp')){go(-1);e.preventDefault();}
-  else if((e.key==='Enter'||e.key===' ')&&document.activeElement===stage&&items().length){openTT(items()[Math.round(target)]);e.preventDefault();}
+  else if((e.key==='Enter'||e.key===' ')&&document.activeElement===stage&&items().length){openItem(items()[Math.round(target)]);e.preventDefault();}
   else if(e.key==='/'){$('#sq').focus();e.preventDefault();}
 });
 let rT=0,lastLay=lay();window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{sizeStage();if(lay()!==lastLay){lastLay=lay();renderShelf();}else{if(lay()==='crate')stage.style.setProperty('--cwt',Math.max(0,crateTop()-S*.42)+'px');place();}},60);});
