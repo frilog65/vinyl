@@ -539,6 +539,51 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
   .pv .tl{-webkit-mask-image:none;mask-image:none;overflow:visible}
   .pv-close{top:14px;right:14px}
 }
+
+/* ---------- phone, portrait: minimal player, progress around the record ---------- */
+@property --prog{syntax:'<number>';inherits:true;initial-value:0}
+.hub,.flip-w{display:none}
+@media (max-width:600px) and (orientation:portrait){
+  .vin{padding-block:calc(64px + env(safe-area-inset-top,0px)) calc(20px + env(safe-area-inset-bottom,0px));
+    background:radial-gradient(ellipse 90% 40% at 50% 34%,rgba(255,214,150,.07),rgba(255,214,150,0) 70%),rgba(10,9,8,.98)}
+  .vin .tt-inner{gap:34px}
+  .vin .deck{--P:min(calc(100vw - 64px),44vh,420px);width:var(--P);height:var(--P);margin-top:12px;transition:--prog .9s linear}
+  .vin .deck::before{content:"";position:absolute;inset:-12px;border-radius:50%;pointer-events:none;
+    background:conic-gradient(#d6b26a calc(var(--prog)*1turn),#3a3128 0);
+    -webkit-mask:radial-gradient(closest-side,transparent calc(100% - 3px),#000 calc(100% - 2.5px));mask:radial-gradient(closest-side,transparent calc(100% - 3px),#000 calc(100% - 2.5px))}
+  .vin .plinth{background:none;box-shadow:none;border-radius:50%}
+  .vin .plinth::before,.vin .plinth::after,.vin .platter::before,.vin .pivot,.vin .armrest,.vin .arm,.vin .led{display:none}
+  .vin .platter{left:0;top:0;background:#0c0c0e;box-shadow:0 30px 60px rgba(0,0,0,.7)}
+  .vin .mat{inset:0;background:repeating-radial-gradient(circle closest-side,#0e0e10 0 .5%,#151518 .5% 1%)}
+  .vin .tt-flip,.vin .rec-sheen{inset:0}
+  .hub{display:grid;place-items:center;position:absolute;left:50%;top:50%;z-index:6;width:58px;height:58px;padding:0;transform:translate(-50%,-50%);
+    border-radius:999px;border:0;background:rgba(13,11,10,.74);color:#f0d391;box-shadow:0 0 0 1px rgba(214,178,106,.42);cursor:pointer;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:transform .15s}
+  .hub:active{transform:translate(-50%,-50%) scale(.94)}
+  .hub:disabled{opacity:.5}
+  .hub svg{width:22px;height:22px}
+  .vin .np{width:100%;grid-template-columns:1fr;gap:26px;text-align:center}
+  .vin .np-cover,.vin .np-meta .kicker,.vin .np-bar,.vin #c-play{display:none}
+  .vin .np-meta{gap:6px}
+  .vin .np-meta h2{font-size:clamp(22px,7vw,28px);line-height:1.1}
+  .vin .np-meta p{font-size:15px}
+  .vin .np-ui{grid-template-columns:52px minmax(0,1fr) 52px;grid-template-areas:"prev time next" "flip flip flip" "now now now";align-items:center;gap:22px 8px;padding:0 12px}
+  .vin .np-ui>div:first-child,.vin .np-ctrl{display:contents}
+  .vin .np-times{grid-area:time;justify-content:center;gap:6px;margin:0;font-size:13px}
+  .vin #np-dur:not(:empty)::before{content:"/ ";color:#4a433c}
+  .vin #c-prev{grid-area:prev}
+  .vin #c-next{grid-area:next}
+  .vin #c-prev,.vin #c-next{background:none;border:0}
+  .vin #c-prev svg,.vin #c-next svg{width:24px;height:24px}
+  .vin #c-flip{grid-area:flip;justify-self:center;min-height:38px;padding:0 16px;gap:8px;background:none;border:1px solid #2c2620;color:#8f8a83;
+    font:500 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase}
+  .vin #c-flip svg{width:14px;height:14px}
+  .vin #c-flip:disabled{opacity:.35}
+  .flip-w{display:inline}
+  .vin #c-list{position:fixed;z-index:21;top:calc(22px + env(safe-area-inset-top,0px));right:max(20px,env(safe-area-inset-right,0px));background:none;border:0}
+  .vin .np-top .btn{background:none;border:0}
+  .vin .np-ui .now{grid-area:now;font-size:13px}
+}
 </style>
 </head>
 <body>
@@ -575,8 +620,9 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
     <div class="np-top-k" id="np-top-k"></div><span></span>
   </div>
   <div class="tt-inner">
-    <div class="deck" aria-hidden="true">
-      <div class="plinth">
+    <div class="deck">
+      <button class="hub" id="c-hub" type="button" aria-label="Пауза"></button>
+      <div class="plinth" aria-hidden="true">
         <div class="platter">
           <div class="spin" id="tt-spin"><div class="mat"></div></div><div class="strobe"></div>
           <div class="tt-flip" id="tt-flip"><div class="vrec" id="tt-rec" hidden></div></div>
@@ -962,6 +1008,9 @@ async function flyIn(r){
   const cov=$('#tt-cover');
   if(!cov||RM||tt.hidden)return;
   const a=cov.getBoundingClientRect(),b=ttRec.getBoundingClientRect(),size=b.width;if(!size)return;
+  if(!a.width){const fl=document.createElement('div');fl.className='vrec fly';fl.style.width=fl.style.height=size+'px';paintRec(fl,r,'A');tt.appendChild(fl);SFX.sleeve();
+    try{await fl.animate([{transform:`translate(${b.left}px,${b.top+70}px) scale(.82) rotate(-60deg)`,opacity:0},{transform:`translate(${b.left}px,${b.top}px) scale(1) rotate(0deg)`,opacity:1}],{duration:900,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'}).finished;}catch(_){}
+    fl.remove();SFX.drop();return;}
   const fly=document.createElement('div');fly.className='vrec fly';fly.style.width=fly.style.height=size+'px';paintRec(fly,r,'A');tt.appendChild(fly);
   const s0=a.width*.92/size,x0=a.left+a.width/2-size/2,y0=a.top+a.height/2-size/2,xo=x0+a.width*.62,x1=b.left,y1=b.top;
   cov.classList.add('sliding');SFX.sleeve();
@@ -1178,7 +1227,7 @@ function openItem(r){if(player.rec===r)openTT(r);else openPreview(r);}
 function openTT(r,playIdx){
   viewRec=r;closeDrawer();renderInfo();tt.hidden=false;updateMini();poke();
   requestAnimationFrame(()=>requestAnimationFrame(()=>tt.classList.add('show')));
-  setTimeout(()=>{const b=$('#c-play');b&&b.focus({preventScroll:true});},60);
+  setTimeout(()=>{const b=PHONE_MQ.matches?$('#c-hub'):$('#c-play');b&&b.focus({preventScroll:true});},60);
   ensureTracks(r).then(()=>{if(viewRec!==r)return;renderInfo();
     if(playIdx!=null){if(player.rec===r){if(!player.busy)cueAndPlay(playIdx);}else setTimeout(()=>{if(viewRec===r&&!tt.hidden)swapRecord(r,playIdx);},300);return;}
     if(!player.playing&&!player.busy&&player.rec!==r)setTimeout(()=>{if(viewRec===r&&!tt.hidden&&!player.playing&&!player.busy&&player.rec!==r)swapRecord(r,null);},300);
@@ -1203,7 +1252,7 @@ function renderInfo(){
         <button class="btn icon" type="button" id="c-prev" aria-label="Предыдущий трек">${ICON.prev}</button>
         <button class="btn primary play round" type="button" id="c-play"></button>
         <button class="btn icon" type="button" id="c-next" aria-label="Следующий трек">${ICON.next}</button>
-        <button class="btn" type="button" id="c-flip" aria-label="Перевернуть пластинку">${ICON.flip}<span id="c-flip-t">B</span></button>
+        <button class="btn" type="button" id="c-flip" aria-label="Перевернуть пластинку">${ICON.flip}<span class="flip-w">Сторона </span><span id="c-flip-t">B</span></button>
         <button class="btn icon" type="button" id="c-list" aria-label="Список треков" aria-expanded="false">${ICON.list}</button>
       </div>
       <p class="now" id="c-now"></p>
@@ -1245,6 +1294,11 @@ async function toggleSaved(r,btn){
   }catch(e){btn.disabled=false;toast(apiErr(e));}
 }
 function updateUI(){updateNow();updateMini();}
+const deckEl=$('#tt .deck'),hub=$('#c-hub');let progV=-1;
+hub.onclick=()=>{const b=$('#c-play');if(b&&!b.disabled)b.click();poke();};
+function setProg(v){v=Math.round(v*1000)/1000;if(v===progV)return;
+  if(v<progV-.05){deckEl.style.transition='none';deckEl.style.setProperty('--prog',v);void deckEl.offsetWidth;deckEl.style.transition='';}
+  else deckEl.style.setProperty('--prog',v);progV=v;}
 function updateNow(){
   const r=viewRec;if(!r||tt.hidden)return;
   const onDeck=player.rec===r,live=onDeck&&(player.state==='play'||player.state==='pause'),t=T(r)[player.idx];
@@ -1252,10 +1306,10 @@ function updateNow(){
   if(live&&t){
     set1('np-kick',trackCode(r,player.idx)+(r.year?' · '+r.year:''));set1('np-title',t.title);
     set1('np-sub',(t.artist||r.artist||'')+' · '+(r.comp?(t.album||r.title):r.title));
-    const el=spElapsed();set1('np-el',fmtE(el));set1('np-dur',fmt(t.dur));const f=$('#np-fill');if(f)f.style.width=(t.dur>0?clamp(el/t.dur,0,1)*100:0).toFixed(2)+'%';
+    const el=spElapsed();set1('np-el',fmtE(el));set1('np-dur',fmt(t.dur));const fr=t.dur>0?clamp(el/t.dur,0,1):0,f=$('#np-fill');if(f)f.style.width=(fr*100).toFixed(2)+'%';setProg(fr);
   }else{
     set1('np-kick',['LP · 33⅓',r.year].filter(Boolean).join(' · '));set1('np-title',r.title);set1('np-sub',r.artist||'');
-    set1('np-el','0:00');set1('np-dur',fmtLong(recDur(r))||'');const f=$('#np-fill');if(f)f.style.width='0%';
+    set1('np-el','0:00');set1('np-dur',fmtLong(recDur(r))||'');const f=$('#np-fill');if(f)f.style.width='0%';setProg(0);
   }
   set1('np-top-k',onDeck&&player.state==='play'?'Сейчас играет · сторона '+player.side:onDeck&&player.state==='pause'?'Пауза · сторона '+player.side:'Проигрыватель');
   const pb=$('#c-play');
@@ -1268,6 +1322,7 @@ function updateNow(){
     else if(player.state==='end')label='Сначала';
     else label='Опустить иглу';
     if(pb.innerHTML!==ic)pb.innerHTML=ic;pb.setAttribute('aria-label',label);pb.disabled=player.busy||!r.tracks;
+    if(hub.innerHTML!==ic)hub.innerHTML=ic;hub.setAttribute('aria-label',label);hub.disabled=pb.disabled;
     $('#c-prev').disabled=!onDeck||player.busy;$('#c-next').disabled=!onDeck||player.busy||player.idx>=T(r).length-1;
     $('#c-flip').disabled=!onDeck||player.busy||!hasB(r);set1('c-flip-t',onDeck&&player.side==='B'?'A':'B');
   }
