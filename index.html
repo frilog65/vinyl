@@ -469,6 +469,33 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
 .vin .tgl[aria-pressed="true"]{border-color:rgba(214,178,106,.5)}
 .vin .tgl[aria-pressed="true"]::before{background:#d6b26a}
 @media (max-width:820px),(orientation:portrait){.vin{background:radial-gradient(ellipse 80% 45% at 50% 18%,rgba(255,214,150,.13),rgba(255,214,150,0) 70%),rgba(10,10,12,.97)}}
+
+/* ---------- phone, portrait: big carousel or crate ---------- */
+.view-btn{display:none}
+@media (max-width:600px) and (orientation:portrait){.view-btn{display:inline-flex}}
+.lay-big .slot{top:57%}
+.lay-big::before{top:calc(57% + var(--S)/2 + 1px)}
+.lay-big::after{top:calc(57% + var(--S)/2 + 2px)}
+.lay-big .slot.center .peek{transform:translateY(-33%)}
+.lay-crate{touch-action:none;perspective:1000px;perspective-origin:50% 0%}
+.lay-crate::before,.lay-crate::after{display:none}
+.lay-crate .slot{left:50%;top:0;width:var(--S);height:var(--S);transform-origin:50% 100%;will-change:transform,opacity}
+.ci-sl{position:absolute;inset:0;border-radius:3px;overflow:hidden;--u:calc(var(--S)/100);box-shadow:0 -10px 26px rgba(0,0,0,.55),inset 0 0 0 1px var(--edge)}
+.ci-rec{inset:auto;left:6%;top:4%;width:88%;height:88%;opacity:0;transform:translateY(0);transition:transform .55s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.lay-crate .slot.center .ci-rec{opacity:1;transform:translateY(-31%)}
+.crate-wall{position:absolute;top:var(--cwt);bottom:calc(var(--cf) - 10px);width:16px;border-radius:4px;z-index:1;pointer-events:none;filter:brightness(.6);
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,0) 10%),repeating-linear-gradient(180deg,#5a3a25 0 9px,#4a2f1e 9px 15px,#5e3d27 15px 24px)}
+.crate-wall.l{left:calc(50% - var(--S)/2 - 26px)}
+.crate-wall.r{left:calc(50% + var(--S)/2 + 10px)}
+.crate-front{position:absolute;left:0;right:0;bottom:0;height:var(--cf);z-index:3000;border-radius:10px 10px 4px 4px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,0) 8%,rgba(0,0,0,0) 85%,rgba(0,0,0,.35)),repeating-linear-gradient(91deg,#5a3a25 0 7px,#4a2f1e 7px 12px,#5e3d27 12px 19px,#3e2718 19px 21px);
+  box-shadow:0 -16px 34px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.06)}
+.crate-front i{position:absolute;left:50%;top:22px;width:110px;height:28px;transform:translateX(-50%);border-radius:999px;background:var(--bg);box-shadow:inset 0 6px 10px rgba(0,0,0,.8)}
+.crate-front span{position:absolute;left:0;right:0;bottom:18px;text-align:center;font:600 20px/1 var(--f-hand);color:rgba(255,236,210,.42)}
+.stage.lay-big+.caption .hint,.stage.lay-crate+.caption .hint{display:block}
+.vw{display:flex;gap:8px;flex-wrap:wrap}
+.vw button{min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--bg-2);color:var(--ink);font:600 14px var(--f-body);cursor:pointer}
+.vw button[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 </style>
 </head>
 <body>
@@ -489,6 +516,7 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
       <button class="btn icon" id="dev-btn" type="button" aria-label="Где играет музыка и настройки">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2.5"/><circle cx="12" cy="14" r="3"/><path d="M12 7.5h.01"/></svg>
       </button>
+      <button class="btn icon view-btn" id="view-btn" type="button" aria-label="Вид полки"></button>
       <button class="btn icon" id="snd-btn" type="button" aria-label="Звуки интерфейса" aria-pressed="true"></button>
     </div>
   </header>
@@ -967,7 +995,19 @@ let mode=LS.get('sv.mode','albums');if(mode==='search')mode='albums';
 const posMem={albums:0,playlists:0,search:0};
 let cur=0,target=0,raf=0,slots=[],S=200,lastCap=-1,shelfMsg='';
 const items=()=>lib[mode]||[];
-function sizeStage(){const h=stage.clientHeight,w=stage.clientWidth;S=Math.round(Math.max(130,Math.min(h*.6,w*.34,420)));stage.style.setProperty('--S',S+'px');}
+const PHONE_MQ=window.matchMedia('(max-width: 600px) and (orientation: portrait)');
+let phoneView=LS.get('sv.phoneview','big')==='crate'?'crate':'big';
+const lay=()=>PHONE_MQ.matches?phoneView:'wide';
+function sizeStage(){
+  const h=stage.clientHeight,w=stage.clientWidth,L=lay();
+  if(L==='big')S=Math.round(Math.max(150,Math.min(w*.76,h*.56)));
+  else if(L==='crate'){S=Math.round(Math.max(150,Math.min(w*.78,h*.55)));
+    const cf=Math.round(clamp(h*.22,96,160));stage.style.setProperty('--cf',cf+'px');}
+  else S=Math.round(Math.max(130,Math.min(h*.6,w*.34,420)));
+  stage.style.setProperty('--S',S+'px');
+  stage.classList.toggle('lay-big',L==='big');stage.classList.toggle('lay-crate',L==='crate');
+}
+function crateTop(){const h=stage.clientHeight,cf=Math.round(clamp(h*.22,96,160));return h-cf-S+Math.min(cf-12,S*.32);}
 function setMode(m,at){
   posMem[mode]=Math.round(target);mode=m;if(m!=='search')LS.set('sv.mode',m);
   ['albums','playlists','search'].forEach(k=>$('#m-'+k).setAttribute('aria-selected',String(k===m)));
@@ -983,16 +1023,39 @@ function renderShelf(){
     stage.innerHTML=`<div class="empty"><b>${shelfMsg?'Секунду':'Пусто'}</b><span class="${shelfMsg?'loading-dots':''}">${esc(msg)}</span></div>`;
     slots=[];caption.innerHTML='';return;
   }
-  stage.innerHTML=L.map((r,i)=>`<div class="slot" data-i="${i}">${sleeveHTML(r)}</div>`).join('');
+  if(lay()==='crate'){
+    stage.innerHTML=L.map((r,i)=>`<div class="slot" data-i="${i}"><div class="vrec ci-rec" style="background-image:${recBg(r,'A').replace(/"/g,'&quot;')}">${labelHTML(r,'A')}</div><div class="ci-sl">${art(r)}<div class="glint"></div></div></div>`).join('')
+      +'<div class="crate-wall l"></div><div class="crate-wall r"></div><div class="crate-front"><i></i><span>листай вверх и вниз</span></div>';
+    stage.style.setProperty('--cwt',Math.max(0,crateTop()-S*.42)+'px');
+  }else stage.innerHTML=L.map((r,i)=>`<div class="slot" data-i="${i}">${sleeveHTML(r)}</div>`).join('');
   slots=[...stage.querySelectorAll('.slot')];
   target=clamp(Math.round(target),0,L.length-1);cur=clamp(cur,0,L.length-1);lastCap=-1;place();
 }
+function placeCrate(){
+  const L=items(),top=crateTop(),step=Math.max(12,S*.06);
+  for(let i=0;i<slots.length;i++){
+    const d=i-cur,el=slots[i];
+    if(d>7.5||d<-1.6){el.style.visibility='hidden';continue;}
+    el.style.visibility='';
+    let y,sc,op=1,br=1,rx=0,z;
+    if(d>=0){const k=Math.min(d,6);y=-k*step;sc=1-k*.03;br=1-k*.12;z=1000-Math.round(d*10);if(d>6)op=Math.max(0,7.5-d)/1.5;}
+    else{const k=-d;y=k*S*.5;rx=-k*70;sc=1+k*.02;op=Math.max(0,1-k*1.6);z=1100+Math.round(k*10);}
+    el.style.top=top+'px';
+    el.style.transform=`translateX(-50%) translateY(${y.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
+    el.style.zIndex=String(z);el.style.opacity=op.toFixed(3);el.style.filter=br<.999?`brightness(${br.toFixed(2)})`:'';
+    el.classList.toggle('center',Math.abs(d)<.5);
+    el.style.setProperty('--gx',(50+fingerS*45).toFixed(1)+'%');el.style.setProperty('--gi',(.25+.5*gI).toFixed(3));
+  }
+  const ci=clamp(Math.round(cur),0,L.length-1);
+  if(ci!==lastCap){if(lastCap!==-1)SFX.tick();lastCap=ci;renderCaption(ci);}
+}
 function place(){
-  const L=items(),first=S*1.16,side=S*.25;
+  const LY=lay();if(LY==='crate'){placeCrate();return;}
+  const L=items(),first=LY==='big'?S*.74:S*1.16,side=LY==='big'?S*.2:S*.25,ang=LY==='big'?50:58;
   for(let i=0;i<slots.length;i++){
     const d=i-cur,ad=Math.abs(d),sg=d<0?-1:1,c=Math.min(ad,1);
     const x=ad<=1?d*first:sg*(first+(ad-1)*side);
-    const ry=-sg*c*58+(1-c)*-10+tilt,z=-c*190-Math.max(0,ad-1)*12;
+    const ry=-sg*c*ang+(1-c)*(LY==='big'?0:-10)+tilt,z=-c*190-Math.max(0,ad-1)*12;
     const el=slots[i];
     el.style.transform=`translate(-50%,-50%) translate3d(${x.toFixed(1)}px,0,${z.toFixed(1)}px) rotateY(${ry.toFixed(2)}deg)`;
     el.style.zIndex=String(1000-Math.round(ad*10));
@@ -1011,7 +1074,7 @@ function renderCaption(i){
   const n=T(r).length||r.total;if(n)bits.push(`<span>${n} ${plural(n,'трек','трека','треков')}${recDur(r)?' · '+fmtLong(recDur(r)):''}</span>`);
   if(r.kind==='playlist')bits.push('<span class="chip mine">плейлист</span>');
   else if(mode==='search'&&isSaved(r))bits.push('<span class="chip mine">на полке</span>');
-  caption.innerHTML=`<p class="cap-title">${esc(r.title)}</p><p class="cap-meta">${bits.join('<span aria-hidden="true">·</span>')}</p><p class="hint">Листай свайпом. Тап по пластинке в центре открывает проигрыватель</p>`;
+  caption.innerHTML=`<p class="cap-title">${esc(r.title)}</p><p class="cap-meta">${bits.join('<span aria-hidden="true">·</span>')}</p><p class="hint">${lay()==='crate'?`${i+1} из ${items().length} · тап по передней пластинке открывает проигрыватель`:lay()==='big'?`${i+1} из ${items().length} · тап по пластинке открывает проигрыватель`:'Листай свайпом. Тап по пластинке в центре открывает проигрыватель'}</p>`;
 }
 let tilt=0,prevCur=0,fingerN=0,fingerS=0,gI=0;
 function tick(){
@@ -1027,10 +1090,11 @@ function kick(){if(!raf)raf=requestAnimationFrame(tick);}
 function go(step){const n=items().length;if(!n)return;target=clamp(Math.round(target)+step,0,n-1);kick();}
 let dragging=false,moved=false,sx=0,scur=0,lx=0,lt=0,vel=0,downSlot=null;
 const fingerAt=e=>{const r=stage.getBoundingClientRect();fingerN=clamp((e.clientX-r.left)/r.width*2-1,-1,1);};
-stage.addEventListener('pointerdown',e=>{if(!items().length||e.button>0)return;dragging=true;moved=false;sx=lx=e.clientX;scur=cur;lt=performance.now();vel=0;
+const axis=e=>lay()==='crate'?e.clientY:e.clientX;
+stage.addEventListener('pointerdown',e=>{if(!items().length||e.button>0)return;dragging=true;moved=false;sx=lx=axis(e);scur=cur;lt=performance.now();vel=0;
   downSlot=e.target.closest('.slot');fingerAt(e);try{stage.setPointerCapture(e.pointerId);}catch(_){}kick();});
-stage.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-sx;if(Math.abs(dx)>7)moved=true;fingerAt(e);
-  const unit=S*.5;cur=clamp(scur-dx/unit,-.45,items().length-.55);const now=performance.now(),dt=Math.max(1,now-lt);vel=.7*vel+.3*(-(e.clientX-lx)/unit)/(dt/1000);lx=e.clientX;lt=now;});
+stage.addEventListener('pointermove',e=>{if(!dragging)return;const p=axis(e),dx=p-sx;if(Math.abs(dx)>7)moved=true;fingerAt(e);
+  const unit=lay()==='crate'?S*.38:S*.5;cur=clamp(scur-dx/unit,-.45,items().length-.55);const now=performance.now(),dt=Math.max(1,now-lt);vel=.7*vel+.3*(-(p-lx)/unit)/(dt/1000);lx=p;lt=now;});
 function endDrag(){if(!dragging)return;dragging=false;const n=items().length;
   if(!moved&&downSlot){const i=+downSlot.dataset.i;if(i===Math.round(cur)){target=i;openTT(items()[i]);}else target=i;}
   else target=clamp(Math.round(cur+clamp(vel,-14,14)*.16),0,n-1);downSlot=null;kick();}
@@ -1198,6 +1262,10 @@ async function openDevices(note){
     <div class="dv-list" id="dv-list"><p class="now loading-dots">Ищу устройства</p></div>
     <div class="btn-row"><button type="button" class="btn" id="dv-ref">Обновить</button><a class="btn" href="intent://#Intent;package=com.spotify.music;end">Открыть Spotify</a></div>
     <div class="hr"></div>
+    <div class="field"><label>Вид полки на телефоне</label><div class="vw" id="dv-view">
+      <button type="button" data-v="big" aria-pressed="${phoneView==='big'}">Карусель</button><button type="button" data-v="crate" aria-pressed="${phoneView==='crate'}">Ящик с пластинками</button></div>
+      <p class="now" style="margin:4px 0 0">Работает, когда телефон держишь вертикально. На планшете и компьютере полка остаётся каруселью.</p></div>
+    <div class="hr"></div>
     <div class="acc"><p id="dv-acc" class="now"></p><button type="button" class="btn danger" id="dv-out">Выйти из Spotify</button></div>
   </div>`);
   const list=$('#dv-list');
@@ -1214,6 +1282,7 @@ async function openDevices(note){
     list.querySelectorAll('.dv').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
     if(player.playing){try{await api('/me/player',{method:'PUT',body:{device_ids:[sp.device],play:true}});toast('Музыка переехала на «'+b.querySelector('span').firstChild.textContent+'»');}catch(err){toast(apiErr(err));}}});
   $('#dv-ref').onclick=load;
+  $('#dv-view').onclick=e=>{const b=e.target.closest('button[data-v]');if(!b)return;$('#dv-view').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setPhoneView(b.dataset.v);};
   $('#dv-out').onclick=()=>{closeSheet();closeTT();ejectAll();logout('Ты вышел из Spotify.');};
   $('#dv-acc').innerHTML=lib.me?`Аккаунт Spotify: <b>${esc(lib.me.display_name||lib.me.id)}</b>`:'';
   load();
@@ -1245,11 +1314,17 @@ document.addEventListener('keydown',e=>{
   if(!sheet.hidden){if(e.key==='Escape')closeSheet();return;}
   const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;
   if(!tt.hidden){poke();if(e.key==='Escape'){if(dr.open)closeDrawer();else closeTT();}else if(e.key===' '&&e.target.tagName!=='BUTTON'){mainAction();e.preventDefault();}return;}
-  if(e.key==='ArrowRight'){go(1);e.preventDefault();}else if(e.key==='ArrowLeft'){go(-1);e.preventDefault();}
+  if(e.key==='ArrowRight'||(lay()==='crate'&&e.key==='ArrowDown')){go(1);e.preventDefault();}else if(e.key==='ArrowLeft'||(lay()==='crate'&&e.key==='ArrowUp')){go(-1);e.preventDefault();}
   else if((e.key==='Enter'||e.key===' ')&&document.activeElement===stage&&items().length){openTT(items()[Math.round(target)]);e.preventDefault();}
   else if(e.key==='/'){$('#sq').focus();e.preventDefault();}
 });
-let rT=0;window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{sizeStage();place();},60);});
+let rT=0,lastLay=lay();window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{sizeStage();if(lay()!==lastLay){lastLay=lay();renderShelf();}else{if(lay()==='crate')stage.style.setProperty('--cwt',Math.max(0,crateTop()-S*.42)+'px');place();}},60);});
+const VIEW_ICON={big:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="6" y="5" width="12" height="12" rx="1"/><path d="M2.5 7v8M21.5 7v8"/></svg>',
+  crate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 4h10M6 7h12"/><rect x="5" y="10" width="14" height="10" rx="1"/></svg>'};
+function setPhoneView(v){phoneView=v;LS.set('sv.phoneview',v);lastLay=lay();drawViewBtn();sizeStage();renderShelf();}
+function drawViewBtn(){const b=$('#view-btn');const next=phoneView==='big'?'crate':'big';b.innerHTML=VIEW_ICON[next];b.setAttribute('aria-label',next==='crate'?'Показать полку как ящик с пластинками':'Показать полку как карусель');}
+$('#view-btn').onclick=()=>{SFX.tick();setPhoneView(phoneView==='big'?'crate':'big');};
+drawViewBtn();
 setArm(86);drawSnd();
 (async()=>{
   const err=await handleCallback();
