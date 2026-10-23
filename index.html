@@ -591,6 +591,12 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
   .vin .np-top .btn{background:none;border:0}
   .vin .np-ui .now{grid-area:now;font-size:13px}
 }
+
+/* ---------- shelf: paint only what is seen ---------- */
+.slot:not(.near) .peek{visibility:hidden}
+.slot:not(.near) .glint{display:none}
+.slot:not(.near) .f-mirror{display:none}
+.slot{contain:style}
 </style>
 </head>
 <body>
@@ -1094,7 +1100,7 @@ requestAnimationFrame(loop);
 /* ---------- shelf ---------- */
 let mode=LS.get('sv.mode','albums');if(mode==='search')mode='albums';
 const posMem={albums:0,playlists:0,search:0};
-let cur=0,target=0,raf=0,slots=[],S=200,lastCap=-1,shelfMsg='';
+let cur=0,target=0,raf=0,slotMap=new Map(),stageW=800,S=200,lastCap=-1,shelfMsg='';
 const items=()=>lib[mode]||[];
 const PHONE_MQ=window.matchMedia('(max-width: 600px) and (orientation: portrait)');
 let phoneView=LS.get('sv.phoneview','big')==='crate'?'crate':'big';
@@ -1105,7 +1111,7 @@ function sizeStage(){
   else if(L==='crate'){S=Math.round(Math.max(150,Math.min(w*.78,h*.55)));
     const cf=Math.round(clamp(h*.22,96,160));stage.style.setProperty('--cf',cf+'px');}
   else S=Math.round(Math.max(130,Math.min(h*.6,w*.34,420)));
-  stage.style.setProperty('--S',S+'px');
+  stage.style.setProperty('--S',S+'px');stageW=w;
   stage.classList.toggle('lay-big',L==='big');stage.classList.toggle('lay-crate',L==='crate');
 }
 function crateTop(){const h=stage.clientHeight,cf=Math.round(clamp(h*.22,96,160));return h-cf-S+Math.min(cf-12,S*.32);}
@@ -1122,49 +1128,36 @@ function renderShelf(){
     const msg=shelfMsg||(mode==='albums'?'В медиатеке Spotify нет сохранённых альбомов. Найди альбом через поиск и добавь его на полку.'
       :mode==='playlists'?'Здесь появятся твои плейлисты из Spotify. Они встанут на полку как пластинки-сборники.':'Ничего не нашлось. Попробуй по-другому написать название или исполнителя.');
     stage.innerHTML=`<div class="empty"><b>${shelfMsg?'Секунду':'Пусто'}</b><span class="${shelfMsg?'loading-dots':''}">${esc(msg)}</span></div>`;
-    slots=[];caption.innerHTML='';return;
+    slotMap=new Map();caption.innerHTML='';return;
   }
-  if(lay()==='crate'){
-    stage.innerHTML=L.map((r,i)=>`<div class="slot" data-i="${i}"><div class="vrec ci-rec" style="background-image:${recBg(r,'A').replace(/"/g,'&quot;')}">${labelHTML(r,'A')}</div><div class="ci-sl">${art(r)}<div class="glint"></div></div></div>`).join('')
-      +'<div class="crate-wall l"></div><div class="crate-wall r"></div><div class="crate-front"><i></i><span>листай вверх и вниз</span></div>';
-    stage.style.setProperty('--cwt',Math.max(0,crateTop()-S*.42)+'px');
-  }else stage.innerHTML=L.map((r,i)=>`<div class="slot" data-i="${i}">${sleeveHTML(r)}</div>`).join('');
-  slots=[...stage.querySelectorAll('.slot')];
+  stage.innerHTML='';slotMap=new Map();
   target=clamp(Math.round(target),0,L.length-1);cur=clamp(cur,0,L.length-1);lastCap=-1;place();
 }
-function placeCrate(){
-  const L=items(),top=crateTop(),step=Math.max(12,S*.06);
-  for(let i=0;i<slots.length;i++){
-    const d=i-cur,el=slots[i];
-    if(d>7.5||d<-1.6){el.style.visibility='hidden';continue;}
-    el.style.visibility='';
-    let y,sc,op=1,br=1,rx=0,z;
-    if(d>=0){const k=Math.min(d,6);y=-k*step;sc=1-k*.03;br=1-k*.12;z=1000-Math.round(d*10);if(d>6)op=Math.max(0,7.5-d)/1.5;}
-    else{const k=-d;y=k*S*.5;rx=-k*70;sc=1+k*.02;op=Math.max(0,1-k*1.6);z=1100+Math.round(k*10);}
-    el.style.top=top+'px';
-    el.style.transform=`translateX(-50%) translateY(${y.toFixed(1)}px) rotateX(${rx.toFixed(1)}deg) scale(${sc.toFixed(3)})`;
-    el.style.zIndex=String(z);el.style.opacity=op.toFixed(3);el.style.filter=br<.999?`brightness(${br.toFixed(2)})`:'';
-    el.classList.toggle('center',Math.abs(d)<.5);
-    el.style.setProperty('--gx',(50+fingerS*45).toFixed(1)+'%');el.style.setProperty('--gi',(.25+.5*gI).toFixed(3));
-  }
-  const ci=clamp(Math.round(cur),0,L.length-1);
-  if(ci!==lastCap){if(lastCap!==-1)SFX.tick();lastCap=ci;renderCaption(ci);}
+/* only the sleeves near the centre live in the page: a shelf of 141 playlists stays as light as one of 10 */
+function reach(LY,first,side){return Math.min(9,1+Math.max(0,stageW/2+S*.62-first)/side)+.6;}
+function syncSlots(L,M){
+  const n=L.length,lo=Math.max(0,Math.floor(cur-M)),hi=Math.min(n-1,Math.ceil(cur+M));
+  for(const [i,el] of slotMap)if(i<lo-2||i>hi+2||!L[i]){el.remove();slotMap.delete(i);}
+  for(let i=lo;i<=hi;i++)if(!slotMap.has(i)){
+    const el=document.createElement('div');el.className='slot';el.dataset.i=i;el.innerHTML=sleeveHTML(L[i]);
+    el.style.transform='translate(-50%,-50%) translate3d(0,0,-4000px)';stage.appendChild(el);slotMap.set(i,el);el._st={};}
 }
+function setS(el,k,v){const c=el._st;if(c[k]===v)return;c[k]=v;if(k[0]==='-')el.style.setProperty(k,v);else el.style[k]=v;}
 function place(){
-  const LY=lay();if(LY==='crate'){placeCrate();return;}
-  const L=items(),first=LY==='big'?S*.74:S*1.16,side=LY==='big'?S*.2:S*.25,ang=LY==='big'?50:58;
-  for(let i=0;i<slots.length;i++){
+  const LY=lay(),L=items(),first=LY==='big'?S*.74:S*1.16,side=LY==='big'?S*.2:S*.25,ang=LY==='big'?50:58,M=reach(LY,first,side);
+  syncSlots(L,M);
+  for(const [i,el] of slotMap){
     const d=i-cur,ad=Math.abs(d),sg=d<0?-1:1,c=Math.min(ad,1);
+    if(ad>M){setS(el,'visibility','hidden');continue;}
     const x=ad<=1?d*first:sg*(first+(ad-1)*side);
     const ry=-sg*c*ang+(1-c)*(LY==='big'?0:-10)+tilt,z=-c*190-Math.max(0,ad-1)*12;
-    const el=slots[i];
     el.style.transform=`translate(-50%,-50%) translate3d(${x.toFixed(1)}px,0,${z.toFixed(1)}px) rotateY(${ry.toFixed(2)}deg)`;
-    el.style.zIndex=String(1000-Math.round(ad*10));
-    el.style.opacity=ad>7?String(Math.max(0,8-ad)):'1';
-    el.style.visibility=ad>9?'hidden':'';
-    el.classList.toggle('center',ad<.5);
-    el.style.setProperty('--gx',(50+fingerS*45-ry*.85).toFixed(1)+'%');
-    el.style.setProperty('--gi',(.3+.55*gI).toFixed(3));
+    setS(el,'zIndex',String(1000-Math.round(ad*10)));
+    setS(el,'opacity',ad>7?Math.max(0,8-ad).toFixed(2):'1');
+    setS(el,'visibility','');
+    const cen=ad<.5;if(el._c!==cen){el._c=cen;el.classList.toggle('center',cen);}
+    const near=ad<1.6;if(el._n!==near){el._n=near;el.classList.toggle('near',near);}
+    if(ad<2.6){setS(el,'--gx',(50+fingerS*45-ry*.85).toFixed(0)+'%');setS(el,'--gi',(.3+.55*gI).toFixed(2));}
   }
   const ci=clamp(Math.round(cur),0,L.length-1);
   if(ci!==lastCap){if(lastCap!==-1)SFX.tick();lastCap=ci;renderCaption(ci);}
@@ -1495,7 +1488,7 @@ document.addEventListener('keydown',e=>{
   else if((e.key==='Enter'||e.key===' ')&&document.activeElement===stage&&items().length){openItem(items()[Math.round(target)]);e.preventDefault();}
   else if(e.key==='/'){$('#sq').focus();e.preventDefault();}
 });
-let rT=0,lastLay=lay();window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{sizeStage();if(lay()!==lastLay){lastLay=lay();renderShelf();}else{if(lay()==='crate')stage.style.setProperty('--cwt',Math.max(0,crateTop()-S*.42)+'px');place();}},60);});
+let rT=0,lastLay=lay();window.addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(()=>{sizeStage();if(lay()!==lastLay){lastLay=lay();renderShelf();}else{place();}},60);});
 const VIEW_ICON={big:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="6" y="5" width="12" height="12" rx="1"/><path d="M2.5 7v8M21.5 7v8"/></svg>',
   crate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 4h10M6 7h12"/><rect x="5" y="10" width="14" height="10" rx="1"/></svg>'};
 function setPhoneView(v){phoneView=v;LS.set('sv.phoneview',v);lastLay=lay();drawViewBtn();sizeStage();renderShelf();}
