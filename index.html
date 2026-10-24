@@ -15,7 +15,7 @@
 <title>Полка · Spotify</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Dela+Gothic+One&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600&family=Prata&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Cormorant+Garamond:ital,wght@1,500&family=Dela+Gothic+One&family=Jura:wght@500&family=Oranienbaum&family=Unbounded:wght@500;800&family=JetBrains+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Oswald:wght@500;600&family=Prata&display=swap">
 <style>
 html{height:100%;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 body{margin:0;font-size:14px}
@@ -745,6 +745,10 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
 @media (max-width:600px) and (orientation:portrait){
   .vin #c-comp{position:fixed;z-index:21;top:calc(22px + env(safe-area-inset-top,0px));right:calc(max(20px,env(safe-area-inset-right,0px)) + 50px);background:none;border:0}
 }
+.ce-pal{width:34px;height:34px;flex:none;border-radius:50%;border:0;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.ce-pal[aria-pressed="true"],.ce-font[aria-pressed="true"]{box-shadow:0 0 0 2px #0d0b0a,0 0 0 4px #d6b26a}
+.ce-font{width:52px;height:40px;flex:none;border-radius:12px;border:1px solid #2a2a2e;background:#141316;color:#efe9df;font-size:18px;cursor:pointer;padding:0}
+.ce-pal:focus-visible,.ce-font:focus-visible{outline:2px solid #d6b26a;outline-offset:4px}
 </style>
 </head>
 <body>
@@ -1560,7 +1564,14 @@ pvWrap.addEventListener('click',e=>{if(e.target===pvWrap&&pvDown)closePreview();
 /* ---------- compilations: build a playlist, draw its sleeve, save both to Spotify ---------- */
 const COMP_BG=[['#8a1c2b','Бордо'],['#14233f','Ночь'],['#c98a2b','Охра'],['#234b3a','Хвоя'],['#6b5b95','Сирень'],['#232327','Графит'],['#c4553a','Терракота'],['#e9e0cf','Крем']];
 const COMP_PEN={blue:['#2c4fa6','Синяя'],black:['#23201e','Чёрная'],red:['#b2302a','Красная'],green:['#2d6a45','Зелёная']};
-const COMP_TPL=[['label','Наклейка'],['lines','С линейками'],['big','Большая наклейка'],['window','Окошко']];
+const COMP_TPL=[['aurora','Сияние'],['eclipse','Затмение'],['fluid','Жидкость'],['label','Наклейка']];
+const GLOW_TPL=new Set(['aurora','eclipse','fluid']);
+/* palettes for the glowing sleeves: background, three light colours, ink */
+const COMP_PAL={dusk:['#1a0f2c','#ff6b9a','#ffb36b','#6b5bff','#fff1e8','Закат'],coral:['#170a0b','#ff4a2a','#ff9a3c','#5aa7ff','#fbe9e2','Коралл'],
+  ice:['#080e1c','#4f8dff','#c9e6ff','#9b5cff','#eef5ff','Лёд'],amethyst:['#120d1f','#7b4dff','#ff9a76','#6fd3ff','#f3eefe','Аметист'],
+  mint:['#0b1412','#bff5e2','#ff7a3d','#3d8f7c','#e9fff7','Мята'],rose:['#f2a3b6','#121620','#ff5a3d','#3fb6c8','#121620','Роза'],lime:['#0e0e0f','#d6f24a','#9b6bff','#f4f4f0','#f4f4f0','Лайм']};
+const COMP_FONT={unb:['Unbounded','Unbounded'],oran:['Oranienbaum','Oranienbaum'],corm:['Cormorant','"Cormorant Garamond"'],jura:['Jura','Jura']};
+const TPL_DEF={aurora:{pal:'dusk',font:'unb'},eclipse:{pal:'coral',font:'jura'},fluid:{pal:'ice',font:'unb'}};
 const PAPER='#f4eedf',NEED_SCOPES=['playlist-modify-private','playlist-modify-public','ugc-image-upload'];
 const I_PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
 const I_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -1576,7 +1587,7 @@ const compBySid=sid=>comps.find(c=>c.sid&&c.sid===sid)||null;
 const compById=id=>comps.find(c=>c.cid===id)||null;
 const trackLite=t=>({title:t.title,artist:t.artist||'',album:t.album||'',dur:t.dur||0,uri:t.uri,id:t.id||''});
 function newComp(tracks){
-  const c={cid:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),sid:null,uri:null,name:'Новый сборник',tpl:'label',
+  const c={cid:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),sid:null,uri:null,name:'Новый сборник',tpl:'aurora',pal:'dusk',font:'unb',
     bg:COMP_BG[comps.length%COMP_BG.length][0],pen:'blue',tracks:(tracks||[]).map(trackLite),dirty:true,coverDirty:true,updated:Date.now(),thumb:null};
   comps.unshift(c);saveComps();return c;
 }
@@ -1587,6 +1598,7 @@ const compDur=c=>c.tracks.reduce((s,t)=>s+(t.dur||0),0);
 
 /* the sleeve, drawn on a canvas so the preview is exactly the picture that goes to Spotify */
 function drawCover(cv,c,px){
+  if(GLOW_TPL.has(c.tpl)){drawGlow(cv,c,px);return;}
   cv.width=cv.height=px;const g=cv.getContext('2d'),k=px/100;g.setTransform(k,0,0,k,0,0);
   const ink=inkFor(c.bg),pen=(COMP_PEN[c.pen]||COMP_PEN.blue)[0],tpl=c.tpl;
   g.fillStyle=c.bg;g.fillRect(0,0,100,100);
@@ -1627,6 +1639,80 @@ function hand(g,text,cx,cy,maxW,fs,col){
   lines.forEach((l,i)=>g.fillText(l,0,(i-(lines.length-1)/2)*lh));
   g.restore();
 }
+
+/* ---------- glowing sleeves: Сияние, Затмение, Жидкость ---------- */
+let grainTile=null;
+function grain(){
+  if(grainTile)return grainTile;const n=160,cv=document.createElement('canvas');cv.width=cv.height=n;const g=cv.getContext('2d'),im=g.createImageData(n,n);
+  for(let i=0;i<im.data.length;i+=4){const v=Math.random()*255|0;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;}
+  g.putImageData(im,0,0);return grainTile=cv;
+}
+const rgba=(hex,a)=>{const n=parseInt(hex.slice(1),16);return `rgba(${n>>16},${n>>8&255},${n&255},${a})`;};
+/* a soft-edged layer: drawn small, then scaled up, which blurs it the same way in every browser */
+function soft(g,w,draw){
+  const off=document.createElement('canvas');off.width=off.height=w;const o=off.getContext('2d');o.setTransform(w/100,0,0,w/100,0,0);draw(o);
+  g.save();g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(off,0,0,100,100);g.restore();
+}
+function blob(g,x,y,rx,ry,col,op){
+  const R=rx+12;g.save();g.translate(x,y);g.scale(1,ry/rx);const gr=g.createRadialGradient(0,0,0,0,0,R);
+  gr.addColorStop(0,rgba(col,op));gr.addColorStop(Math.min(.95,rx/R*.7),rgba(col,op*.85));gr.addColorStop(1,rgba(col,0));g.fillStyle=gr;g.beginPath();g.arc(0,0,R,0,Math.PI*2);g.fill();g.restore();
+}
+/* fit a title into maxLines lines no wider than maxW, shrinking the type when it has to */
+function fitTitle(g,text,fontAt,size,maxW,maxLines,ls){
+  const words=text.split(/\s+/).filter(Boolean);let s=size;
+  const setF=v=>{g.font=fontAt(v);if('letterSpacing' in g)g.letterSpacing=(ls*v/size).toFixed(3)+'px';};
+  for(let it=0;it<30;it++){
+    setF(s);const lines=[];let cur='';
+    for(const w of words){const t=cur?cur+' '+w:w;if(g.measureText(t).width<=maxW||!cur)cur=t;else{lines.push(cur);cur=w;}}
+    if(cur)lines.push(cur);
+    if(lines.length<=maxLines&&lines.every(l=>g.measureText(l).width<=maxW))return {lines,size:s};
+    s*=.92;if(s<size*.4){return {lines:lines.slice(0,maxLines),size:s};}
+  }
+  return {lines:[text],size:s};
+}
+function drawGlow(cv,c,px){
+  cv.width=cv.height=px;const g=cv.getContext('2d'),k=px/100;g.setTransform(k,0,0,k,0,0);
+  const tpl=c.tpl,P=COMP_PAL[c.pal]||COMP_PAL[TPL_DEF[tpl].pal],[bg,c1,c2,c3,ink]=P,fk=COMP_FONT[c.font]?c.font:TPL_DEF[tpl].font,yr=new Date().getFullYear();
+  const fam=COMP_FONT[fk][1],upper=fk==='unb'||fk==='jura',scale={unb:1,jura:1.05,oran:1.45,corm:1.3}[fk];
+  const wt=fk==='unb'?(tpl==='eclipse'?500:800):fk==='corm'?'italic 500':fk==='jura'?500:400;
+  const fontAt=v=>`${wt} ${v.toFixed(2)}px ${fam}, sans-serif`;
+  let title=((c.name||'').trim()||'Без названия');if(upper)title=title.toUpperCase();
+  const small=(txt,x,y,sz,col,a,al,lsp)=>{g.save();g.globalAlpha=a;g.fillStyle=col;g.font=`500 ${sz}px ${fk==='unb'?'Unbounded':fk==='jura'?'Jura':'"JetBrains Mono"'}, sans-serif`;
+    g.textAlign=al||'left';g.textBaseline='alphabetic';if('letterSpacing' in g)g.letterSpacing=(lsp||0)+'px';g.fillText(txt,x,y);g.restore();};
+  g.fillStyle=bg;g.fillRect(0,0,100,100);
+  if(tpl==='aurora'){
+    blob(g,50,50,44,17,c1,.3);
+    for(let i=0;i<12;i++){
+      const a=10-i*.55,ph=i*.45,y0=40+i*1.9,gr=g.createLinearGradient(0,0,100,0);gr.addColorStop(0,c3);gr.addColorStop(.5,c1);gr.addColorStop(1,c2);
+      g.save();g.globalAlpha=.95-i*.05;g.strokeStyle=gr;g.lineWidth=.9-i*.04;g.lineCap='round';g.beginPath();
+      for(let x=-4;x<=106;x+=2){const y=y0+a*Math.sin(x/100*2*Math.PI*1.2+ph);x===-4?g.moveTo(x,y):g.lineTo(x,y);}g.stroke();g.restore();}
+    const base=7.2*scale,{lines,size}=fitTitle(g,title,fontAt,base,86,3,-.2);
+    g.save();g.fillStyle=ink;g.textBaseline='alphabetic';const lh=size*1.05;lines.forEach((l,i)=>g.fillText(l,7,88-(lines.length-1-i)*lh));g.restore();
+    small('СБОРНИК',93,9,2.8,ink,.8,'right');small(String(yr),93,12.4,2.8,ink,.8,'right');
+  }else if(tpl==='eclipse'){
+    soft(g,110,o=>{
+      const gh=o.createLinearGradient(-3,0,51,0);gh.addColorStop(0,rgba(bg,0));gh.addColorStop(1,rgba(c1,.55));o.fillStyle=gh;o.beginPath();o.arc(24,60,27,0,Math.PI*2);o.fill();
+      const e=o.createRadialGradient(67,60,0,67,60,33);e.addColorStop(0,c2);e.addColorStop(.55,c1);e.addColorStop(1,rgba(c1,0));o.fillStyle=e;o.beginPath();o.arc(64,60,30,0,Math.PI*2);o.fill();
+      const rim=o.createLinearGradient(35,0,93,0);rim.addColorStop(0,rgba(c3,0));rim.addColorStop(.7,rgba(c3,.9));rim.addColorStop(1,rgba(c3,0));o.strokeStyle=rim;o.lineWidth=1.6;o.beginPath();o.arc(64,60,29,0,Math.PI*2);o.stroke();
+      o.globalAlpha=.92;o.fillStyle=bg;o.beginPath();o.arc(51,60,26,0,Math.PI*2);o.fill();});
+    g.save();g.globalAlpha=.18;g.fillStyle=ink;g.fillRect(49.8,20,.35,80);g.restore();
+    const base=4.4*scale,{lines,size}=fitTitle(g,title,fontAt,base,80,3,.9);
+    g.save();g.fillStyle=ink;g.textAlign='center';g.textBaseline='alphabetic';const lh=size*1.18;lines.forEach((l,i)=>g.fillText(l,50,12+i*lh));g.restore();
+    small(('СБОРНИК · '+yr),50,94,2.6,ink,.7,'center',.8);
+  }else{ // fluid
+    g.fillStyle=c1;g.fillRect(0,0,100,100);
+    [[30,62,34,22,bg,.95],[70,40,26,30,c2,.9],[58,78,30,14,c3,.85],[22,30,20,16,c2,.6],[78,86,18,12,bg,.9]].forEach(b=>blob(g,...b));
+    soft(g,160,o=>{o.strokeStyle='rgba(255,255,255,.75)';o.lineWidth=.7;o.beginPath();o.moveTo(8,52);o.bezierCurveTo(30,40,60,70,92,46);o.stroke();});
+    g.save();g.fillStyle='rgba(255,255,255,.45)';[34,66.5,67.5].forEach(y=>g.fillRect(0,y,100,.25));g.restore();
+    const base=9.5*scale,{lines,size}=fitTitle(g,title,fontAt,base,86,3,-.4);
+    g.save();g.fillStyle='#ffffff';g.textBaseline='alphabetic';const lh=size*1.01;lines.forEach((l,i)=>g.fillText(l,7,17+i*lh));g.restore();
+    small(('СБОРНИК · '+yr),7,94,2.6,'#ffffff',.85,'left',.6);
+  }
+  // film grain
+  g.save();g.setTransform(1,0,0,1,0,0);g.globalAlpha=.18;g.globalCompositeOperation='overlay';
+  const t=grain(),step=Math.max(1,Math.round(px/640*1.3));g.fillStyle=g.createPattern(t,'repeat');
+  if(step>1){g.scale(step,step);g.fillRect(0,0,px/step,px/step);}else g.fillRect(0,0,px,px);g.restore();
+}
 function coverJPEG(c,px,maxB64){
   const cv=document.createElement('canvas');drawCover(cv,c,px);
   for(const q of [.92,.85,.78,.7,.6,.5]){const u=cv.toDataURL('image/jpeg',q);if(!maxB64||u.length-23<=maxB64)return u;}
@@ -1634,7 +1720,7 @@ function coverJPEG(c,px,maxB64){
 }
 let fontsOk=false;
 function whenFonts(){if(fontsOk||!document.fonts)return Promise.resolve();
-  return Promise.all(['600 40px Caveat','500 20px "JetBrains Mono"'].map(f=>document.fonts.load(f).catch(()=>{}))).then(()=>{fontsOk=true;});}
+  return Promise.all(['600 40px Caveat','500 20px "JetBrains Mono"','800 40px Unbounded','500 40px Unbounded','40px Oranienbaum','italic 500 40px "Cormorant Garamond"','500 40px Jura'].map(f=>document.fonts.load(f).catch(()=>{}))).then(()=>{fontsOk=true;});}
 
 /* ---------- editor ---------- */
 const ce=$('#ce'),ca=$('#ca'),cs=$('#cs');
@@ -1650,11 +1736,12 @@ function drawEditorArt(){
   const c=cur_c;if(!c)return;
   const big=$('#ce-cv');if(big)drawCover(big,c,Math.round(big.clientWidth*(devicePixelRatio||1))||600);
   ce.querySelectorAll('.ce-tpl canvas').forEach(cv=>drawCover(cv,Object.assign({},c,{tpl:cv.dataset.t}),Math.round(64*(devicePixelRatio||1))));
-  const d=$('#ce-disc');if(d)d.style.setProperty('--lb',c.bg);
+  const d=$('#ce-disc');if(d)d.style.setProperty('--lb',GLOW_TPL.has(c.tpl)?(COMP_PAL[c.pal]||COMP_PAL.dusk)[1]:c.bg);
   const im=$('#ce-img');if(im){const rem=c.remoteCover&&!c.coverDirty;im.hidden=!rem;if(rem&&im.getAttribute('src')!==c.remoteCover)im.src=c.remoteCover;}
 }
 function renderEditor(){
-  const c=cur_c,saved=!!c.sid;
+  const c=cur_c,saved=!!c.sid,glow=GLOW_TPL.has(c.tpl);
+  if(glow){if(!COMP_PAL[c.pal])c.pal=TPL_DEF[c.tpl].pal;if(!COMP_FONT[c.font])c.font=TPL_DEF[c.tpl].font;}
   const sw=COMP_BG.map(([h,n])=>`<button type="button" class="ce-sw" data-bg="${h}" aria-label="Цвет: ${n}" aria-pressed="${c.bg===h}" style="--a:${h}"></button>`).join('');
   const custom=!COMP_BG.some(x=>x[0]===c.bg);
   ce.innerHTML=`
@@ -1664,9 +1751,11 @@ function renderEditor(){
     <div class="ce-left">
       <div class="ce-art"><div class="ce-disc" id="ce-disc" aria-hidden="true"></div><canvas id="ce-cv" role="img" aria-label="Обложка сборника"></canvas><img id="ce-img" alt="Обложка сборника в Spotify" hidden></div>
       <div class="ce-tpls" role="radiogroup" aria-label="Шаблон обложки">${COMP_TPL.map(([t,n])=>`<button type="button" class="ce-tpl" role="radio" data-t="${t}" aria-checked="${c.tpl===t}" aria-label="${n}" title="${n}"><canvas data-t="${t}"></canvas></button>`).join('')}</div>
+      ${glow?`<div class="ce-row"><span class="ce-lab">Цвета</span><div class="ce-sws">${Object.entries(COMP_PAL).map(([k,[b,a1,a2,a3,,n]])=>`<button type="button" class="ce-pal" data-pal="${k}" aria-label="Цвета: ${n}" title="${n}" aria-pressed="${c.pal===k}" style="background:radial-gradient(circle at 34% 30%,${a2},${a1} 45%,${a3} 75%,${b})"></button>`).join('')}</div></div>
+      <div class="ce-row"><span class="ce-lab">Шрифт</span><div class="ce-sws">${Object.entries(COMP_FONT).map(([k,[n,f]])=>`<button type="button" class="ce-font" data-f="${k}" aria-label="Шрифт: ${n}" title="${n}" aria-pressed="${(c.font||TPL_DEF[c.tpl].font)===k}" style="font-family:${f.replace(/"/g,"'")};${k==='corm'?'font-style:italic;':''}${k==='unb'?'font-weight:800;':''}">Аа</button>`).join('')}</div></div>`:`
       <div class="ce-row"><span class="ce-lab">Фон</span><div class="ce-sws">${sw}
         <label class="ce-sw ce-own${custom?' on':''}" title="Свой цвет" style="--a:${custom?c.bg:'transparent'}"><input type="color" id="ce-color" value="${c.bg}" aria-label="Свой цвет фона">${custom?'':I_PLUS}</label></div></div>
-      <div class="ce-row"><span class="ce-lab">Ручка</span><div class="ce-sws">${Object.entries(COMP_PEN).map(([k,[h,n]])=>`<button type="button" class="ce-pen" data-p="${k}" aria-label="Ручка: ${n}" aria-pressed="${c.pen===k}" style="--a:${h}"></button>`).join('')}</div></div>
+      <div class="ce-row"><span class="ce-lab">Ручка</span><div class="ce-sws">${Object.entries(COMP_PEN).map(([k,[h,n]])=>`<button type="button" class="ce-pen" data-p="${k}" aria-label="Ручка: ${n}" aria-pressed="${c.pen===k}" style="--a:${h}"></button>`).join('')}</div></div>`}
     </div>
     <div class="ce-right">
       <div class="field"><label for="ce-name">Название</label><input id="ce-name" maxlength="100" autocomplete="off" value="${esc(c.name)}"></div>
@@ -1681,9 +1770,12 @@ function renderEditor(){
   </div>`;
   $('#ce-close').onclick=closeComp;
   $('#ce-name').oninput=e=>{c.name=e.target.value;touch(c,1);drawEditorArt();drawSave();};
-  ce.querySelectorAll('.ce-tpl').forEach(b=>b.onclick=()=>{c.tpl=b.dataset.t;touch(c,1);ce.querySelectorAll('.ce-tpl').forEach(x=>x.setAttribute('aria-checked',String(x===b)));drawEditorArt();drawSave();});
+  ce.querySelectorAll('.ce-tpl').forEach(b=>b.onclick=()=>{const was=GLOW_TPL.has(c.tpl);c.tpl=b.dataset.t;touch(c,1);
+    if(was!==GLOW_TPL.has(c.tpl)){renderEditorKeepScroll();return;}ce.querySelectorAll('.ce-tpl').forEach(x=>x.setAttribute('aria-checked',String(x===b)));drawEditorArt();drawSave();});
+  ce.querySelectorAll('.ce-pal').forEach(b=>b.onclick=()=>{c.pal=b.dataset.pal;touch(c,1);ce.querySelectorAll('.ce-pal').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawEditorArt();drawSave();});
+  ce.querySelectorAll('.ce-font').forEach(b=>b.onclick=()=>{c.font=b.dataset.f;touch(c,1);ce.querySelectorAll('.ce-font').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawEditorArt();drawSave();});
   ce.querySelectorAll('.ce-sw[data-bg]').forEach(b=>b.onclick=()=>{c.bg=b.dataset.bg;touch(c,1);renderEditorKeepScroll();});
-  $('#ce-color').oninput=e=>{c.bg=e.target.value;touch(c,1);drawEditorArt();const l=ce.querySelector('.ce-own');l.classList.add('on');l.style.setProperty('--a',c.bg);
+  if($('#ce-color'))$('#ce-color').oninput=e=>{c.bg=e.target.value;touch(c,1);drawEditorArt();const l=ce.querySelector('.ce-own');l.classList.add('on');l.style.setProperty('--a',c.bg);
     ce.querySelectorAll('.ce-sw[data-bg]').forEach(x=>x.setAttribute('aria-pressed','false'));drawSave();};
   ce.querySelectorAll('.ce-pen').forEach(b=>b.onclick=()=>{c.pen=b.dataset.p;touch(c,1);ce.querySelectorAll('.ce-pen').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawEditorArt();drawSave();});
   $('#ce-add').onclick=()=>openAdd();
