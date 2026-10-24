@@ -598,6 +598,153 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
 .slot:not(.near) .glint{display:none}
 .slot:not(.near) .f-mirror{display:none}
 .slot{contain:style}
+
+/* ---------- compilations ---------- */
+.seg-add{width:36px;min-height:36px;margin-left:6px;padding:0;align-self:center}
+.seg-add svg{width:18px;height:18px}
+.brand{align-items:center}
+.ce{position:fixed;inset:0;z-index:55;overflow:auto;overscroll-behavior:contain;opacity:0;transition:opacity .25s;color:#efe9df;
+  background:radial-gradient(ellipse 55% 70% at 24% 50%,#2a1f17 0%,rgba(13,11,10,0) 70%),#0d0b0a}
+.ce.show{opacity:1}
+.ce-top{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;gap:12px;
+  padding:calc(18px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) 10px max(24px,env(safe-area-inset-left,0px));
+  background:linear-gradient(180deg,#0d0b0a 60%,rgba(13,11,10,0))}
+.ce-top .btn{background:#141416;border-color:#2a2a2e}
+.ce-k{text-align:center;font:500 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#9a948c}
+.ce-body{--cs:min(376px,30vw,calc(100vh - 330px));display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(28px,4vw,64px);
+  padding:20px max(40px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(40px,env(safe-area-inset-left,0px));
+  max-width:1280px;margin:0 auto;box-sizing:border-box;min-height:calc(100% - 80px)}
+.ce-left{display:flex;flex-direction:column;gap:20px;width:calc(var(--cs)*1.25);max-width:100%}
+.ce-art{position:relative;width:calc(var(--cs)*1.25);height:var(--cs);max-width:100%}
+.ce-art canvas,.ce-art img{position:absolute;left:0;top:0;width:var(--cs);height:var(--cs);border-radius:3px;z-index:2;box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.06);object-fit:cover}
+.ce-disc{position:absolute;left:calc(var(--cs)*.34);top:4%;width:calc(var(--cs)*.92);height:calc(var(--cs)*.92);border-radius:50%;z-index:1;
+  background:radial-gradient(circle closest-side,var(--lb,#8a1c2b) 0 32%,#0c0c0e 33% 96%,#2a2a2e 97%,#0c0c0e 100%),repeating-radial-gradient(circle closest-side,#0c0c0e 0 1.2%,#17171a 1.2% 2.4%);
+  box-shadow:0 24px 50px rgba(0,0,0,.6)}
+.ce-tpls{display:flex;gap:14px;flex-wrap:wrap}
+.ce-tpl{width:64px;height:64px;padding:0;border:0;border-radius:4px;background:none;cursor:pointer;opacity:.72;transition:opacity .2s}
+.ce-tpl canvas{width:64px;height:64px;display:block;border-radius:4px}
+.ce-tpl[aria-checked="true"]{opacity:1;box-shadow:0 0 0 2px #0d0b0a,0 0 0 4px #d6b26a}
+.ce-tpl:focus-visible,.ce-sw:focus-visible,.ce-pen:focus-visible{outline:2px solid #d6b26a;outline-offset:4px}
+.ce-row{display:flex;align-items:center;gap:14px}
+.ce-lab{width:52px;flex:none;font:500 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#9a948c}
+.ce-sws{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.ce-sw{position:relative;width:32px;height:32px;flex:none;border-radius:50%;border:0;padding:0;cursor:pointer;background:var(--a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.ce-sw[aria-pressed="true"],.ce-own.on{box-shadow:0 0 0 2px #0d0b0a,0 0 0 4px #d6b26a}
+.ce-own{display:grid;place-items:center;color:#9a948c;border:1px dashed #4a4540;box-sizing:border-box;overflow:hidden}
+.ce-own.on{border:0}
+.ce-own svg{width:16px;height:16px}
+.ce-own input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;padding:0;border:0}
+.ce-pen{width:30px;height:30px;flex:none;border-radius:50%;border:3px solid #f4eedf;padding:0;cursor:pointer;background:var(--a)}
+.ce-pen[aria-pressed="true"]{box-shadow:0 0 0 2px #0d0b0a,0 0 0 4px #d6b26a}
+.ce-right{display:flex;flex-direction:column;gap:16px;min-width:0;min-height:0}
+.ce-right .field>label{color:#9a948c;letter-spacing:.14em}
+#ce-name{height:56px;padding:0 18px;border-radius:14px;border:1px solid #2a2a2e;background:#141316;color:#efe9df;font:400 22px var(--f-disp)}
+#ce-name:focus{outline:2px solid #d6b26a;border-color:transparent}
+.ce-meta{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ce-meta .kicker{color:#d6b26a}
+.ce .btn:not(.go):not(.icon),.ca .btn:not(.go):not(.icon),.cs .btn:not(.go):not(.icon){background:#1b1a1d;border-color:#2a2a2e;color:#efe9df}
+.ce-list{flex:1;min-height:180px;max-height:calc(100vh - 360px);overflow:auto;overscroll-behavior:contain;border-radius:18px;background:#141316;border:1px solid #2a2a2e;padding:10px 8px}
+.ce-list h3{font:500 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#9a948c;margin:14px 12px 6px}
+.ce-list h3:first-child{margin-top:4px}
+.ce-trk{position:relative;display:grid;grid-template-columns:22px 30px minmax(0,1fr) auto 36px;gap:10px;align-items:center;padding:6px 6px 6px 8px;border-radius:12px;background:#141316;transition:transform .15s}
+.ce-trk.drag{z-index:3;transition:none;background:#1f1d21;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.ce-grip{display:grid;place-items:center;width:22px;height:36px;color:#5d5852;cursor:grab;touch-action:none}
+.ce-grip svg{width:16px;height:16px}
+.ce-trk .n,.ca-trk .n{font:500 11px var(--f-mono);color:#9a948c}
+.ce-trk .t,.ca-trk .t{min-width:0;font-weight:500;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ce-trk .t small,.ca-trk .t small{display:block;font-size:12px;color:#9a948c;font-weight:500;overflow:hidden;text-overflow:ellipsis}
+.ce-trk .d,.ca-trk .d{font:400 12px var(--f-mono);color:#9a948c;font-variant-numeric:tabular-nums}
+.ce-x{width:36px;min-height:36px;background:none!important;border:0!important;color:#9a948c}
+.ce-x svg{width:16px;height:16px}
+.ce-empty{display:grid;place-items:center;min-height:160px}
+.ce-actions{display:flex;gap:12px;align-items:center}
+.ce-actions .go{flex:1}
+.ce-actions .go:disabled{opacity:.55;filter:saturate(.6)}
+.ce-actions .btn:not(.go){min-height:54px}
+#ce-del svg{width:18px;height:18px}
+.ce-actions .go{white-space:nowrap}
+.ce .btn.armed{border-color:#b2302a!important;color:#ffb3a8!important}
+.ce .now:empty{display:none}
+
+.ca-wrap{position:fixed;inset:0;z-index:57;background:rgba(10,9,8,.6);opacity:0;transition:opacity .28s}
+.ca-wrap.show{opacity:1}
+.ca,.cs{position:absolute;box-sizing:border-box;display:flex;flex-direction:column;gap:14px;color:#efe9df;background:#141316}
+.ca{top:0;right:0;bottom:0;width:min(620px,100vw);padding:calc(26px + env(safe-area-inset-top,0px)) max(26px,env(safe-area-inset-right,0px)) calc(22px + env(safe-area-inset-bottom,0px)) 26px;
+  border-left:1px solid #2a2a2e;box-shadow:-30px 0 60px rgba(0,0,0,.5);transform:translateX(102%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.ca-wrap.show .ca{transform:none}
+.ca-grip{display:none}
+.ca-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.ca-head h3{margin:0;font:400 21px/1.15 var(--f-disp)}
+.ca-head .kicker{color:#d6b26a;margin-bottom:4px}
+.ca-head .btn{background:#1b1a1d;border-color:#2a2a2e}
+.ca-tabs{align-self:flex-start;max-width:100%;overflow-x:auto;scrollbar-width:none;background:#0f0e10;border-color:#2a2a2e}
+.ca-tabs::-webkit-scrollbar{display:none}
+.ca-tabs button{white-space:nowrap}
+.ca-src:empty{display:none}
+.ca-covers{display:flex;gap:14px;overflow-x:auto;padding:4px 4px 6px;scrollbar-width:thin}
+.ca-cov{flex:none;width:96px;display:flex;flex-direction:column;gap:8px;padding:0;border:0;background:none;color:#efe9df;text-align:left;cursor:pointer;opacity:.7;font:600 12px/1.25 var(--f-body)}
+.ca-cov[aria-pressed="true"]{opacity:1}
+.ca-art{position:relative;display:block;width:96px;height:96px;border-radius:4px;overflow:hidden;--u:.96px}
+.ca-cov[aria-pressed="true"] .ca-art{box-shadow:0 0 0 2px #141316,0 0 0 4px #d6b26a}
+.ca-ct{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ca-q{height:46px;background:#0f0e10;border-color:#2a2a2e}
+.ca-q input{width:100%}
+.ca-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:2px}
+.ca-rh{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 4px 10px}
+.ca-rh b{display:block;font:400 18px/1.15 var(--f-disp)}
+.ca-rh small{display:block;margin-top:4px;font-size:13px;color:#9a948c}
+.ca-rh .btn{min-height:36px;padding:0 14px;font-size:13px;flex:none}
+.ca-trk{display:grid;grid-template-columns:30px minmax(0,1fr) auto 36px;gap:10px;align-items:center;padding:6px 8px;border-radius:12px}
+.ca-trk.on{background:rgba(214,178,106,.08)}
+.ca-tg{width:36px;height:36px;border-radius:50%;padding:0;display:grid;place-items:center;border:1px solid #3a3530;background:none;color:#efe9df;cursor:pointer}
+.ca-tg svg{width:17px;height:17px}
+.ca-tg[aria-pressed="true"]{border:0;background:#d6b26a;color:#1a1408}
+.ca-more{align-self:center;margin:10px 0}
+.ca .go,.cs .go{flex:none}
+
+.cs-wrap{z-index:58}
+.cs{left:50%;bottom:0;width:min(560px,100vw);max-height:min(640px,86vh);padding:26px 14px calc(18px + env(safe-area-inset-bottom,0px));
+  border-radius:26px 26px 0 0;border:1px solid #2c2b2f;border-bottom:0;box-shadow:0 -30px 60px rgba(0,0,0,.6);transform:translate(-50%,102%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.ca-wrap.show .cs{transform:translate(-50%,0)}
+.cs .ca-head{padding:0 10px}
+.cs-list{overflow:auto;display:flex;flex-direction:column;gap:2px;min-height:0}
+.cs-row{display:grid;grid-template-columns:52px minmax(0,1fr) 36px;gap:12px;align-items:center;padding:8px 10px;border-radius:14px;border:0;background:none;color:#efe9df;text-align:left;cursor:pointer}
+.cs-row:hover{background:#1b1a1d}
+.cs-row.on{background:rgba(214,178,106,.08)}
+.cs-th img,.cs-th canvas{width:52px;height:52px;border-radius:3px;display:block}
+.cs-t b{display:block;font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-t small{display:block;font-size:12px;color:#9a948c}
+.cs-ic{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;border:1px solid #3a3530}
+.cs-ic svg{width:16px;height:16px}
+.cs-row:not([aria-pressed]) .cs-ic{border:0;transform:rotate(180deg);color:#9a948c}
+.cs-row.on .cs-ic{border:0;background:#d6b26a;color:#1a1408}
+.cs>.btn{margin:4px 10px 0;min-height:50px}
+
+#c-comp svg{width:20px;height:20px}
+@media (max-width:760px),(orientation:portrait){
+  .ce-body{--cs:min(236px,60vw);grid-template-columns:1fr;gap:18px;padding:6px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+  .ce-left{width:100%;align-items:center;gap:16px}
+  .ce-art{width:calc(var(--cs)*1.3);margin-left:calc(var(--cs)*.15)}
+  .ce-row{width:100%}
+  .ce-tpls{justify-content:center}
+  .ce-list{max-height:none;overflow:visible;padding:6px 4px}
+  .ce-actions{position:fixed;left:0;right:0;bottom:0;z-index:6;padding:12px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(13,11,10,0),#0d0b0a 30%)}
+  .ce-actions .btn:not(.go){min-height:54px;width:54px;padding:0;flex:none}
+  #ce-del-t{display:none}
+  .ce-row{flex-direction:column;align-items:flex-start;gap:10px}
+  .ce-lab{width:auto}
+  .ce-sws{gap:9px}
+  .ce-sw{width:30px;height:30px}
+  #ce-name{height:50px;font-size:19px}
+  .ca{top:calc(56px + env(safe-area-inset-top,0px));left:0;width:auto;border-left:0;border-top:1px solid #2c2b2f;border-radius:26px 26px 0 0;padding:26px 14px calc(16px + env(safe-area-inset-bottom,0px));transform:translateY(102%)}
+  .ca-grip{display:block;position:absolute;left:50%;top:9px;width:40px;height:5px;border-radius:99px;background:#3a393e;transform:translateX(-50%)}
+  .ca-head{padding:0 4px}
+  .ca-trk{padding:6px 4px}
+  .cs{width:100vw}
+}
+@media (max-width:600px) and (orientation:portrait){
+  .vin #c-comp{position:fixed;z-index:21;top:calc(22px + env(safe-area-inset-top,0px));right:calc(max(20px,env(safe-area-inset-right,0px)) + 50px);background:none;border:0}
+}
 </style>
 </head>
 <body>
@@ -609,7 +756,7 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
         <button type="button" role="tab" id="m-playlists" aria-selected="false">Плейлисты <small id="n-playlists"></small></button>
         <button type="button" role="tab" id="m-search" aria-selected="false" hidden><span id="m-search-t">Поиск</span><span class="x" id="m-search-x" aria-label="Закрыть поиск">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></span></button>
-      </div></div>
+      </div><button class="btn icon seg-add" id="comp-btn" type="button" aria-label="Сборники" title="Сборники"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div>
     <div class="actions">
       <form class="sbox" id="sf" role="search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
@@ -687,6 +834,9 @@ input[type="checkbox"]{width:20px;height:20px;accent-color:var(--accent);margin:
 </div>
 
 <div class="pv-wrap" id="pv" lang="ru" hidden></div>
+<div class="ce" id="ce" lang="ru" hidden role="dialog" aria-modal="true" aria-label="Сборник"></div>
+<div class="ca-wrap cs-wrap" id="cs" lang="ru" hidden></div>
+<div class="ca-wrap" id="ca" lang="ru" hidden></div>
 <div class="sheet-wrap" id="sheet" lang="ru" hidden></div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -814,7 +964,7 @@ const SFX={
 
 /* ---------- Spotify: sign in (PKCE, no server needed) ---------- */
 const REDIRECT=location.origin+location.pathname;
-const SCOPES='user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify playlist-read-private playlist-read-collaborative';
+const SCOPES='user-read-playback-state user-modify-playback-state user-read-currently-playing user-library-read user-library-modify playlist-read-private playlist-read-collaborative playlist-modify-private playlist-modify-public ugc-image-upload';
 const AUTH={cid:LS.get('sv.cid',''),tok:LSJ.get('sv.tok',null)};
 function b64url(bytes){let s='';bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function randStr(n){const cs='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~',a=crypto.getRandomValues(new Uint8Array(n));return Array.from(a,x=>cs[x%cs.length]).join('');}
@@ -823,7 +973,7 @@ async function startLogin(){
   const ch=b64url(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ver))));
   location.href='https://accounts.spotify.com/authorize?'+new URLSearchParams({client_id:AUTH.cid,response_type:'code',redirect_uri:REDIRECT,code_challenge_method:'S256',code_challenge:ch,scope:SCOPES,state});
 }
-function saveTok(j){AUTH.tok={access:j.access_token,refresh:j.refresh_token||(AUTH.tok&&AUTH.tok.refresh),exp:Date.now()+((j.expires_in||3600)-90)*1000};LSJ.set('sv.tok',AUTH.tok);}
+function saveTok(j){AUTH.tok={access:j.access_token,refresh:j.refresh_token||(AUTH.tok&&AUTH.tok.refresh),exp:Date.now()+((j.expires_in||3600)-90)*1000,scope:j.scope||(AUTH.tok&&AUTH.tok.scope)||''};LSJ.set('sv.tok',AUTH.tok);}
 async function tokenRequest(params){
   const r=await fetch('https://accounts.spotify.com/api/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(params)});
   const j=await r.json().catch(()=>({}));if(!r.ok)throw {auth:true,status:r.status,message:j.error_description||j.error||'Не удалось войти'};return j;
@@ -849,7 +999,7 @@ async function api(path,opt){
   opt=opt||{};let tries=0,forced=false;
   for(;;){
     const tok=await accessToken(forced);
-    const r=await fetch(path.startsWith('http')?path:'https://api.spotify.com/v1'+path,{method:opt.method||'GET',headers:Object.assign({Authorization:'Bearer '+tok},opt.body?{'Content-Type':'application/json'}:{}),body:opt.body?JSON.stringify(opt.body):undefined});
+    const r=await fetch(path.startsWith('http')?path:'https://api.spotify.com/v1'+path,{method:opt.method||'GET',headers:Object.assign({Authorization:'Bearer '+tok},opt.raw!=null?{'Content-Type':opt.ctype||'text/plain'}:opt.body?{'Content-Type':'application/json'}:{}),body:opt.raw!=null?opt.raw:opt.body?JSON.stringify(opt.body):undefined});
     if(r.status===401&&!forced){forced=true;continue;}
     if(r.status===429&&tries<3){tries++;await sleep((+r.headers.get('Retry-After')||1)*1000+200);continue;}
     if(r.status===204||r.status===202)return null;
@@ -876,7 +1026,7 @@ function albumRec(a){return {id:'al:'+a.id,kind:'album',sid:a.id,uri:a.uri,title
 function playlistRec(p){const items=p.items||p.tracks||{};return {id:'pl:'+p.id,kind:'playlist',comp:true,sid:p.id,uri:p.uri,title:p.name,artist:(p.owner&&p.owner.display_name)||'Плейлист',year:'',
   coverURL:pickImg(p.images),hue:hashN(p.id)%360,total:items.total||0,tracks:null};}
 function mapTrack(t,album){return {title:t.name,artist:(t.artists||[]).map(x=>x.name).join(', '),album:album||(t.album&&t.album.name)||'',dur:(t.duration_ms||0)/1000,uri:t.uri,id:t.id};}
-const light=r=>({id:r.id,kind:r.kind,comp:r.comp,sid:r.sid,uri:r.uri,title:r.title,artist:r.artist,year:r.year,coverURL:r.coverURL,hue:r.hue,total:r.total,tracks:null});
+const light=r=>({id:r.id,kind:r.kind,comp:r.comp,mine:r.mine,polka:r.polka,sid:r.sid,uri:r.uri,title:r.title,artist:r.artist,year:r.year,coverURL:r.coverURL,hue:r.hue,total:r.total,tracks:null});
 async function pages(first,each,max){let url=first,n=0;while(url&&n<(max||40)){const j=await api(url);each(j);url=j&&j.next;n++;}}
 async function loadLibrary(){
   const me=lib.me||(lib.me=await api('/me'));
@@ -884,9 +1034,10 @@ async function loadLibrary(){
   await Promise.all([
     pages('/me/albums?limit=50',j=>(j.items||[]).forEach(x=>{if(!x.album)return;const r=albumRec(x.album);
       const it=x.album.tracks;if(it&&it.items&&it.items.length>=it.total)r.tracks=it.items.map(t=>mapTrack(t,x.album.name));albums.push(r);})),
-    pages('/me/playlists?limit=50',j=>(j.items||[]).forEach(p=>{if(!p)return;if(p.owner&&me&&p.owner.id!==me.id&&!p.collaborative)return;pls.push(playlistRec(p));}))
+    pages('/me/playlists?limit=50',j=>(j.items||[]).forEach(p=>{if(!p)return;if(p.owner&&me&&p.owner.id!==me.id&&!p.collaborative)return;const r=playlistRec(p);r.mine=!!(p.owner&&me&&p.owner.id===me.id);r.polka=/Сборник с Полки/.test(p.description||'');pls.push(r);}))
   ]);
   const keep=(list,old)=>list.map(r=>{const o=old.find(x=>x.id===r.id);if(o&&o.tracks&&!r.tracks)r.tracks=o.tracks;return r;});
+  pls.forEach(r=>{const c=comps.find(x=>x.sid===r.sid);if(c&&c.thumb)r.coverURL=c.thumb;});
   lib.albums=keep(albums,lib.albums);lib.playlists=keep(pls,lib.playlists);
   LSJ.set('sv.albums',lib.albums.map(light));LSJ.set('sv.playlists',lib.playlists.map(light));
 }
@@ -1260,6 +1411,7 @@ function renderInfo(){
         <button class="btn primary play round" type="button" id="c-play"></button>
         <button class="btn icon" type="button" id="c-next" aria-label="Следующий трек">${ICON.next}</button>
         <button class="btn" type="button" id="c-flip" aria-label="Перевернуть пластинку">${ICON.flip}<span class="flip-w">Сторона </span><span id="c-flip-t">B</span></button>
+        <button class="btn icon" type="button" id="c-comp" aria-label="Добавить трек в сборник">${I_ADDTO}</button>
         <button class="btn icon" type="button" id="c-list" aria-label="Список треков" aria-expanded="false">${ICON.list}</button>
       </div>
       <p class="now" id="c-now"></p>
@@ -1275,7 +1427,7 @@ function renderInfo(){
     </div>
     <div class="row2 dr-actions">${r.kind==='album'?(isSaved(r)?'<button class="btn danger" type="button" id="c-save" data-on="1">Убрать с полки</button>':'<button class="btn" type="button" id="c-save" data-on="0">Поставить на полку</button>'):''}
       <button class="btn" type="button" id="c-dev">${ICON.device}Где играет</button></div>`;
-  $('#c-play').onclick=mainAction;$('#c-prev').onclick=prevTrack;$('#c-next').onclick=nextTrack;$('#c-flip').onclick=flipAction;
+  $('#c-comp').onclick=()=>{const r=player.rec&&viewRec===player.rec?player.rec:viewRec,t=r&&T(r)[r===player.rec?player.idx:0];if(!t){toast('Сначала поставь пластинку');return;}openComps(t);};$('#c-play').onclick=mainAction;$('#c-prev').onclick=prevTrack;$('#c-next').onclick=nextTrack;$('#c-flip').onclick=flipAction;
   $('#c-list').onclick=()=>{dr.open?closeDrawer():openDrawer();$('#c-list').setAttribute('aria-expanded',String(dr.open));};
   $('#dr-close').onclick=()=>{closeDrawer();const b=$('#c-list');b&&b.focus({preventScroll:true});};
   $('#t-auto').onclick=e=>{set.autoFlip=!set.autoFlip;LS.set('sv.autoflip',set.autoFlip?'on':'off');e.currentTarget.setAttribute('aria-pressed',set.autoFlip);};
@@ -1381,6 +1533,7 @@ function renderPreview(){
       <div class="pv-meta"><div class="kicker">${esc(meta)}</div><h2 id="pv-t">${esc(r.title)}</h2>${r.artist?`<p>${esc(r.artist)}</p>`:''}</div>
       <div class="pv-btns">
         <button class="btn go" type="button" id="pv-go" ${r.tracks&&tr.length?'':'disabled'}>${ICON.play}${busy?'Сменить пластинку':'Поставить на проигрыватель'}</button>
+        ${r.kind==='playlist'&&(r.polka||compBySid(r.sid))?`<button class="btn" type="button" id="pv-edit">Изменить</button>`:''}
         ${r.kind==='album'?`<button class="btn icon pv-save" type="button" id="pv-save" data-on="${isSaved(r)?1:0}" aria-pressed="${isSaved(r)}" aria-label="${isSaved(r)?'Убрать с полки':'Сохранить на полку'}" title="${isSaved(r)?'Убрать с полки':'Сохранить на полку'}"><svg viewBox="0 0 24 24" fill="${isSaved(r)?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M6 4h12v17l-6-4-6 4z"/></svg></button>`:''}
       </div>
       <div class="tl" id="pv-tl">${tl}</div>
@@ -1392,6 +1545,7 @@ function renderPreview(){
   $('#pv-go').onclick=()=>playFromPreview(r,0);
   $('#pv-tl').onclick=e=>{const b=e.target.closest('.trk');if(b)playFromPreview(r,+b.dataset.i);};
   const sv=$('#pv-save');if(sv)sv.onclick=()=>toggleSaved(r,sv);
+  const ed=$('#pv-edit');if(ed)ed.onclick=()=>editFromPreview(r);
   // pull the sheet down to close it
   const sh=pvWrap.querySelector('.pv'),grip=$('#pv-grip');let y0=null,dy=0;
   grip.addEventListener('pointerdown',e=>{y0=e.clientY;dy=0;sh.classList.add('dragging');try{grip.setPointerCapture(e.pointerId);}catch(_){}});
@@ -1402,6 +1556,364 @@ function renderPreview(){
 let pvDown=false;
 pvWrap.addEventListener('pointerdown',e=>{pvDown=e.target===pvWrap;});
 pvWrap.addEventListener('click',e=>{if(e.target===pvWrap&&pvDown)closePreview();pvDown=false;});
+
+/* ---------- compilations: build a playlist, draw its sleeve, save both to Spotify ---------- */
+const COMP_BG=[['#8a1c2b','Бордо'],['#14233f','Ночь'],['#c98a2b','Охра'],['#234b3a','Хвоя'],['#6b5b95','Сирень'],['#232327','Графит'],['#c4553a','Терракота'],['#e9e0cf','Крем']];
+const COMP_PEN={blue:['#2c4fa6','Синяя'],black:['#23201e','Чёрная'],red:['#b2302a','Красная'],green:['#2d6a45','Зелёная']};
+const COMP_TPL=[['label','Наклейка'],['lines','С линейками'],['big','Большая наклейка'],['window','Окошко']];
+const PAPER='#f4eedf',NEED_SCOPES=['playlist-modify-private','playlist-modify-public','ugc-image-upload'];
+const I_PLUS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+const I_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const I_GRIP='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
+const I_BACK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+const I_SPOT='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M7.5 10c3-1 6.5-.7 9 .8M8 13.3c2.4-.7 5.2-.5 7.2.7M8.6 16.3c1.9-.5 3.9-.3 5.5.5"/></svg>';
+const I_SEARCH='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>';
+const I_ADDTO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h11M4 11h11M4 16h6"/><path d="M18 13v7M14.5 16.5h7"/></svg>';
+
+let comps=LSJ.get('sv.comps',[]);
+const saveComps=()=>{try{localStorage.setItem('sv.comps',JSON.stringify(comps));}catch(_){toast('Не хватает места в памяти браузера для черновиков');}};
+const compBySid=sid=>comps.find(c=>c.sid&&c.sid===sid)||null;
+const compById=id=>comps.find(c=>c.cid===id)||null;
+const trackLite=t=>({title:t.title,artist:t.artist||'',album:t.album||'',dur:t.dur||0,uri:t.uri,id:t.id||''});
+function newComp(tracks){
+  const c={cid:'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),sid:null,uri:null,name:'Новый сборник',tpl:'label',
+    bg:COMP_BG[comps.length%COMP_BG.length][0],pen:'blue',tracks:(tracks||[]).map(trackLite),dirty:true,coverDirty:true,updated:Date.now(),thumb:null};
+  comps.unshift(c);saveComps();return c;
+}
+function hasScopes(){const s=((AUTH.tok&&AUTH.tok.scope)||'').split(/\s+/);return NEED_SCOPES.every(x=>s.includes(x));}
+function lumOf(hex){const n=parseInt(hex.slice(1),16),r=(n>>16)/255,g=(n>>8&255)/255,b=(n&255)/255;return .2126*r+.7152*g+.0722*b;}
+const inkFor=bg=>lumOf(bg)>.6?'#1b1a18':'#f4efe2';
+const compDur=c=>c.tracks.reduce((s,t)=>s+(t.dur||0),0);
+
+/* the sleeve, drawn on a canvas so the preview is exactly the picture that goes to Spotify */
+function drawCover(cv,c,px){
+  cv.width=cv.height=px;const g=cv.getContext('2d'),k=px/100;g.setTransform(k,0,0,k,0,0);
+  const ink=inkFor(c.bg),pen=(COMP_PEN[c.pen]||COMP_PEN.blue)[0],tpl=c.tpl;
+  g.fillStyle=c.bg;g.fillRect(0,0,100,100);
+  const circ=(x,y,r,fill,stroke,w,a)=>{g.save();g.globalAlpha=a==null?1:a;g.beginPath();g.arc(x,y,r,0,Math.PI*2);if(fill){g.fillStyle=fill;g.fill();}if(stroke){g.strokeStyle=stroke;g.lineWidth=w;g.stroke();}g.restore();};
+  const mono=(txt,x,y,sz,col,a,al)=>{g.save();g.globalAlpha=a;g.fillStyle=col;g.font=`500 ${sz}px "JetBrains Mono", ui-monospace, monospace`;g.textAlign=al||'left';g.textBaseline='alphabetic';
+    if('letterSpacing' in g)g.letterSpacing=(sz*.16).toFixed(2)+'px';g.fillText(txt,x,y);g.restore();};
+  const yr=new Date().getFullYear();
+  if(tpl==='window'){
+    circ(50,50,27,'#0c0c0e');[25,23,21,19.5].forEach(r=>circ(50,50,r,null,'#1d1d21',.6));circ(50,50,27,null,ink,.6,.35);
+    circ(50,50,17,PAPER);hand(g,c.name,50,50,26,9,pen);
+    mono('РАЗНЫЕ ИСПОЛНИТЕЛИ',7,10,3.2,ink,.75);
+  }else{
+    const big=tpl==='big',R=big?40:31,cy=47;
+    circ(50,cy,R+3,null,ink,.5,.28);circ(50,cy,R,PAPER);circ(50,cy,R-1.6,null,c.bg,.35,.35);
+    if(tpl==='lines'){g.save();g.strokeStyle='#9fb3d9';g.lineWidth=.45;g.beginPath();g.moveTo(27,45.5);g.lineTo(73,45.5);g.moveTo(30,55);g.lineTo(70,55);g.stroke();g.restore();}
+    hand(g,c.name,50,cy,R*1.5,big?17:14,pen);
+    circ(50,cy+R*.42,1.6,c.bg);
+    if(!big)mono('СБОРНИК · '+yr,7,93,3.2,ink,.75);
+  }
+}
+/* handwritten title: centred, tilted a little, wrapped into two lines and shrunk when it is long */
+function hand(g,text,cx,cy,maxW,fs,col){
+  text=(text||'').trim()||'Без названия';
+  g.save();g.translate(cx,cy);g.rotate(-6*Math.PI/180);g.fillStyle=col;g.textAlign='center';g.textBaseline='middle';
+  const font=s=>`600 ${s}px Caveat, "Segoe Print", cursive`;
+  const width=(t,s)=>{g.font=font(s);return g.measureText(t).width;};
+  let lines=[text],size=fs;
+  if(width(text,fs)>maxW){
+    const words=text.split(/\s+/);
+    if(words.length>1){let best=null;
+      for(let i=1;i<words.length;i++){const a=words.slice(0,i).join(' '),b=words.slice(i).join(' '),w=Math.max(width(a,fs),width(b,fs));if(!best||w<best.w)best={w,l:[a,b]};}
+      lines=best.l;}
+    const w=Math.max(...lines.map(l=>width(l,fs)));
+    if(w>maxW)size=Math.max(fs*.42,fs*maxW/w);
+    if(lines.length>1)size=Math.min(size,fs*.82);
+  }
+  g.font=font(size);const lh=size*.92;
+  lines.forEach((l,i)=>g.fillText(l,0,(i-(lines.length-1)/2)*lh));
+  g.restore();
+}
+function coverJPEG(c,px,maxB64){
+  const cv=document.createElement('canvas');drawCover(cv,c,px);
+  for(const q of [.92,.85,.78,.7,.6,.5]){const u=cv.toDataURL('image/jpeg',q);if(!maxB64||u.length-23<=maxB64)return u;}
+  return cv.toDataURL('image/jpeg',.4);
+}
+let fontsOk=false;
+function whenFonts(){if(fontsOk||!document.fonts)return Promise.resolve();
+  return Promise.all(['600 40px Caveat','500 20px "JetBrains Mono"'].map(f=>document.fonts.load(f).catch(()=>{}))).then(()=>{fontsOk=true;});}
+
+/* ---------- editor ---------- */
+const ce=$('#ce'),ca=$('#ca'),cs=$('#cs');
+let cur_c=null;
+function openComp(c){
+  cur_c=c;renderEditor();ce.hidden=false;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>ce.classList.add('show')));
+  whenFonts().then(()=>{if(cur_c===c)drawEditorArt();});
+}
+function closeComp(){if(ce.hidden)return;closeAdd();ce.classList.remove('show');setTimeout(()=>{ce.hidden=true;ce.innerHTML='';cur_c=null;},RM?0:260);}
+function touch(c,cov){if(cov)c.coverDirty=true;c.dirty=true;c.updated=Date.now();saveComps();}
+function drawEditorArt(){
+  const c=cur_c;if(!c)return;
+  const big=$('#ce-cv');if(big)drawCover(big,c,Math.round(big.clientWidth*(devicePixelRatio||1))||600);
+  ce.querySelectorAll('.ce-tpl canvas').forEach(cv=>drawCover(cv,Object.assign({},c,{tpl:cv.dataset.t}),Math.round(64*(devicePixelRatio||1))));
+  const d=$('#ce-disc');if(d)d.style.setProperty('--lb',c.bg);
+  const im=$('#ce-img');if(im){const rem=c.remoteCover&&!c.coverDirty;im.hidden=!rem;if(rem&&im.getAttribute('src')!==c.remoteCover)im.src=c.remoteCover;}
+}
+function renderEditor(){
+  const c=cur_c,saved=!!c.sid;
+  const sw=COMP_BG.map(([h,n])=>`<button type="button" class="ce-sw" data-bg="${h}" aria-label="Цвет: ${n}" aria-pressed="${c.bg===h}" style="--a:${h}"></button>`).join('');
+  const custom=!COMP_BG.some(x=>x[0]===c.bg);
+  ce.innerHTML=`
+  <div class="ce-top"><button class="btn icon" type="button" id="ce-close" aria-label="Закрыть сборник">${I_BACK}</button>
+    <div class="ce-k">${saved?'Сборник':'Новый сборник'}</div><span></span></div>
+  <div class="ce-body">
+    <div class="ce-left">
+      <div class="ce-art"><div class="ce-disc" id="ce-disc" aria-hidden="true"></div><canvas id="ce-cv" role="img" aria-label="Обложка сборника"></canvas><img id="ce-img" alt="Обложка сборника в Spotify" hidden></div>
+      <div class="ce-tpls" role="radiogroup" aria-label="Шаблон обложки">${COMP_TPL.map(([t,n])=>`<button type="button" class="ce-tpl" role="radio" data-t="${t}" aria-checked="${c.tpl===t}" aria-label="${n}" title="${n}"><canvas data-t="${t}"></canvas></button>`).join('')}</div>
+      <div class="ce-row"><span class="ce-lab">Фон</span><div class="ce-sws">${sw}
+        <label class="ce-sw ce-own${custom?' on':''}" title="Свой цвет" style="--a:${custom?c.bg:'transparent'}"><input type="color" id="ce-color" value="${c.bg}" aria-label="Свой цвет фона">${custom?'':I_PLUS}</label></div></div>
+      <div class="ce-row"><span class="ce-lab">Ручка</span><div class="ce-sws">${Object.entries(COMP_PEN).map(([k,[h,n]])=>`<button type="button" class="ce-pen" data-p="${k}" aria-label="Ручка: ${n}" aria-pressed="${c.pen===k}" style="--a:${h}"></button>`).join('')}</div></div>
+    </div>
+    <div class="ce-right">
+      <div class="field"><label for="ce-name">Название</label><input id="ce-name" maxlength="100" autocomplete="off" value="${esc(c.name)}"></div>
+      <div class="ce-meta"><span class="kicker" id="ce-count"></span><button class="btn" type="button" id="ce-add">${I_PLUS}Добавить треки</button></div>
+      <div class="ce-list" id="ce-list"></div>
+      <div class="ce-actions">
+        <button class="btn go" type="button" id="ce-save">${I_SPOT}<span id="ce-save-t"></span></button>
+        <button class="btn" type="button" id="ce-del" aria-label="${saved?'Убрать из списка':'Удалить черновик'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></svg><span id="ce-del-t">${saved?'Убрать из списка':'Удалить черновик'}</span></button>
+      </div>
+      <p class="now" id="ce-note"></p>
+    </div>
+  </div>`;
+  $('#ce-close').onclick=closeComp;
+  $('#ce-name').oninput=e=>{c.name=e.target.value;touch(c,1);drawEditorArt();drawSave();};
+  ce.querySelectorAll('.ce-tpl').forEach(b=>b.onclick=()=>{c.tpl=b.dataset.t;touch(c,1);ce.querySelectorAll('.ce-tpl').forEach(x=>x.setAttribute('aria-checked',String(x===b)));drawEditorArt();drawSave();});
+  ce.querySelectorAll('.ce-sw[data-bg]').forEach(b=>b.onclick=()=>{c.bg=b.dataset.bg;touch(c,1);renderEditorKeepScroll();});
+  $('#ce-color').oninput=e=>{c.bg=e.target.value;touch(c,1);drawEditorArt();const l=ce.querySelector('.ce-own');l.classList.add('on');l.style.setProperty('--a',c.bg);
+    ce.querySelectorAll('.ce-sw[data-bg]').forEach(x=>x.setAttribute('aria-pressed','false'));drawSave();};
+  ce.querySelectorAll('.ce-pen').forEach(b=>b.onclick=()=>{c.pen=b.dataset.p;touch(c,1);ce.querySelectorAll('.ce-pen').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));drawEditorArt();drawSave();});
+  $('#ce-add').onclick=()=>openAdd();
+  $('#ce-save').onclick=()=>saveComp(c);
+  $('#ce-del').onclick=()=>{const b=$('#ce-del'),bt=$('#ce-del-t');if(!b.classList.contains('armed')){b.classList.add('armed');bt.textContent='Нажми ещё раз';if(PHONE_MQ.matches)toast(c.sid?'Нажми ещё раз, чтобы убрать сборник из списка':'Нажми ещё раз, чтобы удалить черновик');
+      setTimeout(()=>{if(b.isConnected){b.classList.remove('armed');bt.textContent=c.sid?'Убрать из списка':'Удалить черновик';}},3500);return;}
+    comps=comps.filter(x=>x!==c);saveComps();closeComp();toast(saved?'Сборник убран из списка. В Spotify он остался.':'Черновик удалён');};
+  renderList();drawSave();
+  if(fontsOk)drawEditorArt();
+}
+function renderEditorKeepScroll(){const y=ce.scrollTop,l=$('#ce-list'),ly=l?l.scrollTop:0;renderEditor();ce.scrollTop=y;const l2=$('#ce-list');if(l2)l2.scrollTop=ly;}
+function drawSave(){
+  const c=cur_c;if(!c)return;const t=$('#ce-save-t'),b=$('#ce-save');if(!t)return;
+  t.textContent=c.saving?'Сохраняю…':!c.sid?'Сохранить в Spotify':c.dirty?'Обновить в Spotify':'Сохранено в Spotify';
+  b.disabled=!!c.saving||!c.tracks.length||(!!c.sid&&!c.dirty);
+  const n=c.tracks.length,d=compDur(c);$('#ce-count').textContent=n?`${n} ${plural(n,'трек','трека','треков')}${d?' · '+fmtLong(d):''}`:'Пока пусто';
+  $('#ce-note').textContent=!n?'Добавь треки с полки, из своих плейлистов, лайков или через поиск.':'';
+}
+function renderList(){
+  const c=cur_c,el=$('#ce-list');if(!el)return;
+  if(!c.tracks.length){el.innerHTML=`<div class="ce-empty"><button class="btn" type="button" id="ce-add2">${I_PLUS}Добавить первые треки</button></div>`;$('#ce-add2').onclick=()=>openAdd();drawSave();return;}
+  const pseudo={tracks:c.tracks},k=splitOf(pseudo),sd=(a,b)=>fmtLong(c.tracks.slice(a,b).reduce((s,t)=>s+(t.dur||0),0));
+  const row=i=>{const t=c.tracks[i];return `<div class="ce-trk" data-i="${i}"><span class="ce-grip" aria-hidden="true">${I_GRIP}</span><span class="n">${trackCode(pseudo,i)}</span>
+    <span class="t">${esc(t.title)}<small>${esc(t.artist)}</small></span><span class="d">${fmt(t.dur)}</span>
+    <button class="btn icon ce-x" type="button" data-i="${i}" aria-label="Убрать «${esc(t.title)}» из сборника">${X}</button></div>`;};
+  let h=`<h3>Сторона A${k?' · '+sd(0,k):''}</h3>`;for(let i=0;i<k;i++)h+=row(i);
+  if(k<c.tracks.length){h+=`<h3>Сторона B · ${sd(k,c.tracks.length)}</h3>`;for(let i=k;i<c.tracks.length;i++)h+=row(i);}
+  el.innerHTML=h;
+  el.querySelectorAll('.ce-x').forEach(b=>b.onclick=()=>{c.tracks.splice(+b.dataset.i,1);touch(c);renderList();drawSave();});
+  el.querySelectorAll('.ce-grip').forEach(g=>g.addEventListener('pointerdown',dragStart));
+  drawSave();
+}
+/* reorder by dragging the grip */
+let drag=null;
+function dragStart(e){
+  const row=e.currentTarget.closest('.ce-trk'),list=$('#ce-list');if(!row)return;e.preventDefault();
+  const rows=[...list.querySelectorAll('.ce-trk')],rects=rows.map(r=>r.getBoundingClientRect());
+  drag={i:+row.dataset.i,to:+row.dataset.i,row,rows,rects,y0:e.clientY,st:list.scrollTop};
+  row.classList.add('drag');try{e.currentTarget.setPointerCapture(e.pointerId);}catch(_){}
+  e.currentTarget.addEventListener('pointermove',dragMove);e.currentTarget.addEventListener('pointerup',dragEnd);e.currentTarget.addEventListener('pointercancel',dragEnd);
+}
+function dragMove(e){
+  if(!drag)return;const list=$('#ce-list'),dy=e.clientY-drag.y0+(list.scrollTop-drag.st);
+  drag.row.style.transform=`translateY(${dy}px)`;
+  const r0=drag.rects[drag.i],mid=r0.top+r0.height/2+dy;let to=drag.i;
+  drag.rects.forEach((r,j)=>{if(j<drag.i&&mid<r.top+r.height/2)to=Math.min(to,j);if(j>drag.i&&mid>r.top+r.height/2)to=Math.max(to,j);});
+  drag.to=to;const h=r0.height+2;
+  drag.rows.forEach((r,j)=>{if(j===drag.i)return;r.style.transform=(j>=to&&j<drag.i)?`translateY(${h}px)`:(j<=to&&j>drag.i)?`translateY(${-h}px)`:'';});
+  const lr=list.getBoundingClientRect();if(e.clientY<lr.top+30)list.scrollTop-=8;else if(e.clientY>lr.bottom-30)list.scrollTop+=8;
+}
+function dragEnd(e){
+  if(!drag)return;const g=e.currentTarget;g.removeEventListener('pointermove',dragMove);g.removeEventListener('pointerup',dragEnd);g.removeEventListener('pointercancel',dragEnd);
+  const {i,to}=drag;drag=null;
+  if(to!==i){const t=cur_c.tracks.splice(i,1)[0];cur_c.tracks.splice(to,0,t);touch(cur_c);SFX.tick();}
+  renderList();
+}
+
+/* ---------- add tracks: shelf, own playlists, liked songs, search ---------- */
+const add={tab:'shelf',rec:null,liked:null,likedNext:null,q:'',res:[],busy:false};
+function openAdd(){
+  ca.hidden=false;renderAdd();requestAnimationFrame(()=>requestAnimationFrame(()=>ca.classList.add('show')));
+}
+function closeAdd(){if(ca.hidden)return;ca.classList.remove('show');setTimeout(()=>{ca.hidden=true;ca.innerHTML='';},RM?0:300);}
+const inComp=uri=>!!cur_c&&cur_c.tracks.some(t=>t.uri===uri);
+function addRows(list,codes){
+  if(!list.length)return '';
+  return list.map((t,i)=>{const on=inComp(t.uri);
+    return `<div class="ca-trk${on?' on':''}"><span class="n">${codes?codes(i):''}</span><span class="t">${esc(t.title)}<small>${esc(t.artist)}${t.album&&add.tab!=='shelf'?' · '+esc(t.album):''}</small></span>
+      <span class="d">${fmt(t.dur)}</span><button class="ca-tg" type="button" data-u="${esc(t.uri)}" aria-pressed="${on}" aria-label="${on?'Убрать':'Добавить'} «${esc(t.title)}»">${on?I_CHECK:I_PLUS}</button></div>`;}).join('');
+}
+let addPool=[];
+function renderAdd(){
+  const tabs=[['shelf','Полка'],['mine','Мои плейлисты'],['liked','Лайки'],['search','Поиск']];
+  const n=cur_c?cur_c.tracks.length:0;
+  ca.innerHTML=`<div class="ca" role="dialog" aria-modal="true" aria-label="Добавить треки">
+    <div class="ca-grip" aria-hidden="true"></div>
+    <div class="ca-head"><h3>Добавить треки</h3><button class="btn icon" type="button" id="ca-close" aria-label="Закрыть">${X}</button></div>
+    <div class="seg ca-tabs" role="tablist">${tabs.map(([k,t])=>`<button type="button" role="tab" data-k="${k}" aria-selected="${add.tab===k}">${t}</button>`).join('')}</div>
+    <div class="ca-src" id="ca-src"></div>
+    <div class="ca-list" id="ca-list"></div>
+    <button class="btn go" type="button" id="ca-done">Готово${n?` · в сборнике ${n} ${plural(n,'трек','трека','треков')}`:''}</button>
+  </div>`;
+  $('#ca-close').onclick=closeAdd;$('#ca-done').onclick=closeAdd;
+  ca.querySelectorAll('.ca-tabs button').forEach(b=>b.onclick=()=>{add.tab=b.dataset.k;add.rec=null;renderAdd();});
+  ca.onclick=e=>{if(e.target===ca)closeAdd();};
+  fillAdd();
+}
+function srcCovers(list){
+  if(!list.length)return `<p class="now">${add.tab==='shelf'?'На полке пока нет альбомов.':'У тебя пока нет своих плейлистов.'}</p>`;
+  return `<div class="ca-covers">${list.map((r,i)=>`<button type="button" class="ca-cov" data-i="${i}" aria-pressed="${add.rec===r}"><span class="ca-art">${art(r)}</span><span class="ca-ct">${esc(r.title)}</span></button>`).join('')}</div>`;
+}
+async function fillAdd(){
+  const src=$('#ca-src'),lst=$('#ca-list');if(!src)return;
+  const bind=()=>{lst.querySelectorAll('.ca-tg').forEach(b=>b.onclick=()=>toggleTrack(b));};
+  if(add.tab==='shelf'||add.tab==='mine'){
+    const list=add.tab==='shelf'?lib.albums:lib.playlists.filter(r=>r.mine&&!(cur_c&&r.sid===cur_c.sid));
+    src.innerHTML=srcCovers(list);
+    src.querySelectorAll('.ca-cov').forEach(b=>b.onclick=()=>{add.rec=list[+b.dataset.i];src.querySelectorAll('.ca-cov').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));fillAddRec();});
+    if(!add.rec&&list.length)add.rec=list[0];
+    const sel=src.querySelector(`.ca-cov[data-i="${list.indexOf(add.rec)}"]`);if(sel){sel.setAttribute('aria-pressed','true');sel.scrollIntoView({block:'nearest',inline:'nearest'});}
+    fillAddRec();return;
+  }
+  if(add.tab==='liked'){
+    src.innerHTML='';
+    if(!add.liked){lst.innerHTML='<p class="now loading-dots">Загружаю лайки</p>';
+      try{const j=await api('/me/tracks?limit=50');add.liked=(j.items||[]).map(x=>x.track&&mapTrack(x.track)).filter(t=>t&&t.uri);add.likedNext=j.next;}
+      catch(e){if(add.tab==='liked')lst.innerHTML=`<p class="now">${esc(apiErr(e))}</p>`;return;}}
+    if(add.tab!=='liked')return;
+    addPool=add.liked;lst.innerHTML=(addRows(add.liked)||'<p class="now">Лайкнутых треков нет.</p>')+(add.likedNext?'<button class="btn ca-more" type="button" id="ca-more">Показать ещё</button>':'');
+    bind();const m=$('#ca-more');if(m)m.onclick=async()=>{m.disabled=true;try{const j=await api(add.likedNext);add.liked=add.liked.concat((j.items||[]).map(x=>x.track&&mapTrack(x.track)).filter(t=>t&&t.uri));add.likedNext=j.next;}catch(e){toast(apiErr(e));}const y=lst.scrollTop;fillAdd().then(()=>{lst.scrollTop=y;});};
+    return;
+  }
+  // search
+  src.innerHTML=`<form class="sbox ca-q" id="ca-qf" role="search">${I_SEARCH}<input type="search" id="ca-q" placeholder="Найти трек" aria-label="Найти трек" autocomplete="off" enterkeyhint="search" value="${esc(add.q)}"></form>`;
+  $('#ca-qf').onsubmit=e=>{e.preventDefault();const q=$('#ca-q').value.trim();if(q)trackSearch(q);};
+  if(!add.q)setTimeout(()=>{const i=$('#ca-q');i&&i.focus();},60);
+  addPool=add.res;lst.innerHTML=add.busy?'<p class="now loading-dots">Ищу в Spotify</p>':add.q&&!add.res.length?'<p class="now">Ничего не нашлось.</p>':addRows(add.res);bind();
+}
+async function fillAddRec(){
+  const lst=$('#ca-list'),r=add.rec;if(!lst)return;
+  if(!r){lst.innerHTML='';return;}
+  if(!r.tracks){lst.innerHTML='<p class="now loading-dots">Загружаю треки</p>';try{await ensureTracks(r);}catch(e){lst.innerHTML=`<p class="now">${esc(apiErr(e))}</p>`;return;}if(add.rec!==r)return;}
+  const tr=T(r);addPool=tr;
+  lst.innerHTML=`<div class="ca-rh"><div><b>${esc(r.title)}</b><small>${esc([r.artist,r.year].filter(Boolean).join(' · '))}</small></div>
+    <button class="btn" type="button" id="ca-all">${tr.every(t=>inComp(t.uri))?'Убрать все':'Добавить все'}</button></div>`+addRows(tr,i=>r.kind==='album'?trackCode(r,i):String(i+1));
+  lst.querySelectorAll('.ca-tg').forEach(b=>b.onclick=()=>toggleTrack(b));
+  $('#ca-all').onclick=()=>{const all=tr.every(t=>inComp(t.uri));
+    if(all)cur_c.tracks=cur_c.tracks.filter(t=>!tr.some(x=>x.uri===t.uri));else tr.forEach(t=>{if(!inComp(t.uri))cur_c.tracks.push(trackLite(t));});
+    touch(cur_c);renderList();const y=lst.scrollTop;fillAddRec().then(()=>{lst.scrollTop=y;});drawDone();};
+}
+function drawDone(){const b=$('#ca-done');if(!b)return;const n=cur_c.tracks.length;b.textContent='Готово'+(n?` · в сборнике ${n} ${plural(n,'трек','трека','треков')}`:'');}
+function toggleTrack(b){
+  const u=b.dataset.u,c=cur_c;if(!c)return;const t=addPool.find(x=>x.uri===u);
+  if(inComp(u))c.tracks=c.tracks.filter(x=>x.uri!==u);else if(t)c.tracks.push(trackLite(t));
+  const on=inComp(u);b.setAttribute('aria-pressed',String(on));b.innerHTML=on?I_CHECK:I_PLUS;b.closest('.ca-trk').classList.toggle('on',on);
+  b.setAttribute('aria-label',(on?'Убрать':'Добавить')+' «'+(t?t.title:'')+'»');
+  touch(c);renderList();drawDone();SFX.tick();
+}
+let qRun=0;
+async function trackSearch(q){
+  const run=++qRun;add.q=q;add.busy=true;add.res=[];fillAdd();
+  try{const enc=encodeURIComponent(q),res=await Promise.all([0,10].map(o=>api(`/search?q=${enc}&type=track&limit=10&offset=${o}`).catch(()=>null)));
+    if(run!==qRun)return;const seen=new Set();
+    res.forEach(j=>((j&&j.tracks&&j.tracks.items)||[]).forEach(t=>{if(t&&t.uri&&!seen.has(t.uri)){seen.add(t.uri);add.res.push(mapTrack(t));}}));}
+  catch(e){toast(apiErr(e));}
+  add.busy=false;if(add.tab==='search'&&run===qRun)fillAdd();
+}
+
+/* ---------- save to Spotify ---------- */
+async function saveComp(c){
+  if(c.saving||!c.tracks.length)return;
+  if(!hasScopes()){askRelogin(c);return;}
+  c.saving=true;drawSave();
+  let step='create';
+  try{
+    await whenFonts();
+    const name=(c.name||'').trim()||'Сборник';
+    const fresh=!c.sid;
+    if(!c.sid){const j=await api('/me/playlists',{method:'POST',body:{name,public:false,description:'Сборник с Полки'}});c.sid=j.id;c.uri=j.uri;saveComps();}
+    else{step='rename';await api('/playlists/'+c.sid,{method:'PUT',body:{name}});}
+    step='items';const uris=c.tracks.map(t=>t.uri);
+    await api(`/playlists/${c.sid}/items`,{method:'PUT',body:{uris:uris.slice(0,100)}});
+    for(let i=100;i<uris.length;i+=100)await api(`/playlists/${c.sid}/items`,{method:'POST',body:{uris:uris.slice(i,i+100)}});
+    step='cover';let coverOk=true;
+    if(fresh||c.coverDirty)try{const u=coverJPEG(c,640,256*1024);await api(`/playlists/${c.sid}/images`,{method:'PUT',raw:u.slice(u.indexOf(',')+1),ctype:'image/jpeg'});}
+    catch(e){coverOk=false;console.warn('cover',e);}
+    if(coverOk&&(fresh||c.coverDirty)){c.thumb=coverJPEG(c,300);c.coverDirty=false;}c.dirty=false;c.saving=false;c.updated=Date.now();saveComps();
+    shelfRecFor(c);
+    toast(coverOk?'Сборник сохранён в Spotify':'Сборник сохранён, но Spotify не принял обложку. Попробуй обновить ещё раз.');
+  }catch(e){
+    c.saving=false;saveComps();
+    if(e&&e.status===403&&step==='create')toast('Spotify не дал создать плейлист. Проверь, что приложение в режиме разработчика и ты в списке пользователей.');
+    else toast(apiErr(e));
+  }
+  if(cur_c===c){drawSave();const k=ce.querySelector('.ce-k');if(k)k.textContent=c.sid?'Сборник':'Новый сборник';const d=$('#ce-del-t');if(d&&c.sid){d.textContent='Убрать из списка';$('#ce-del').setAttribute('aria-label','Убрать из списка');}}
+}
+/* the shelf shows the new sleeve at once, without waiting for Spotify to process the upload */
+function shelfRecFor(c){
+  let r=lib.playlists.find(x=>x.sid===c.sid);
+  if(!r){r={id:'pl:'+c.sid,kind:'playlist',comp:true,mine:true,sid:c.sid,uri:c.uri||('spotify:playlist:'+c.sid),artist:(lib.me&&(lib.me.display_name||lib.me.id))||'Сборник',year:'',hue:hashN(c.sid)%360};lib.playlists.unshift(r);}
+  r.title=(c.name||'').trim()||'Сборник';if(c.thumb)r.coverURL=c.thumb;r.polka=true;r.tracks=c.tracks.map(t=>Object.assign({},t));r.total=c.tracks.length;r.mine=true;
+  LSJ.set('sv.playlists',lib.playlists.map(light));
+  if(mode==='playlists')renderShelf();else $('#n-playlists').textContent=lib.playlists.length||'';
+}
+function askRelogin(c){
+  openSheet(`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="rl-h"><div class="sheet-head"><h3 id="rl-h">Нужно ещё одно разрешение</h3><button class="btn icon" type="button" data-close aria-label="Закрыть">${X}</button></div>
+    <p>Чтобы создавать плейлисты и загружать обложки, Spotify должен дать приложению новые права. Войди ещё раз, черновик сохранится и откроется снова.</p>
+    <div class="sheet-foot"><button class="btn" type="button" data-close>Позже</button><button class="btn primary" type="button" id="rl-go">Войти через Spotify</button></div></div>`);
+  $('#rl-go').onclick=()=>{LS.set('sv.reopen',c.cid);startLogin();};
+}
+
+/* ---------- "В сборник": from the player, and the list of compilations ---------- */
+function compThumb(c){if(c.thumb)return `<img src="${c.thumb}" alt="">`;return `<canvas data-cid="${c.cid}"></canvas>`;}
+function openComps(track){
+  const t=track?trackLite(track):null;
+  const rows=comps.map(c=>{const has=t&&c.tracks.some(x=>x.uri===t.uri),n=c.tracks.length;
+    return `<button type="button" class="cs-row${has?' on':''}" data-cid="${c.cid}" ${t&&has?'aria-pressed="true"':t?'aria-pressed="false"':''}>
+      <span class="cs-th">${compThumb(c)}</span><span class="cs-t"><b>${esc(c.name||'Сборник')}</b><small>${n} ${plural(n,'трек','трека','треков')}${c.sid?(c.dirty?' · есть изменения':' · в Spotify'):' · черновик'}</small></span>
+      <span class="cs-ic">${t?(has?I_CHECK:I_PLUS):I_BACK}</span></button>`;}).join('');
+  cs.innerHTML=`<div class="cs" role="dialog" aria-modal="true" aria-labelledby="cs-h">
+    <div class="ca-grip" aria-hidden="true"></div>
+    <div class="ca-head"><div><div class="kicker">${t?'В сборник':'Сборники'}</div><h3 id="cs-h">${t?esc(t.title)+(t.artist?' · '+esc(t.artist):''):'Твои сборники'}</h3></div>
+      <button class="btn icon" type="button" id="cs-close" aria-label="Закрыть">${X}</button></div>
+    <div class="cs-list">${rows||'<p class="now">Сборников пока нет. Начни первый.</p>'}</div>
+    <button class="btn${t?'':' go'}" type="button" id="cs-new">${I_PLUS}${t?'Новый сборник с этим треком':'Новый сборник'}</button></div>`;
+  cs.hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>cs.classList.add('show')));
+  whenFonts().then(()=>cs.querySelectorAll('canvas[data-cid]').forEach(cv=>{const c=compById(cv.dataset.cid);if(c)drawCover(cv,c,96);}));
+  $('#cs-close').onclick=closeComps;cs.onclick=e=>{if(e.target===cs)closeComps();};
+  $('#cs-new').onclick=()=>{const c=newComp(t?[t]:[]);closeComps();openComp(c);};
+  cs.querySelectorAll('.cs-row').forEach(b=>b.onclick=async()=>{const c=compById(b.dataset.cid);if(!c)return;
+    if(!t){closeComps();openComp(c);return;}
+    const has=c.tracks.some(x=>x.uri===t.uri);
+    if(has)c.tracks=c.tracks.filter(x=>x.uri!==t.uri);else c.tracks.push(t);touch(c);
+    b.classList.toggle('on',!has);b.setAttribute('aria-pressed',String(!has));b.querySelector('.cs-ic').innerHTML=has?I_PLUS:I_CHECK;
+    const n=c.tracks.length;b.querySelector('small').textContent=`${n} ${plural(n,'трек','трека','треков')}${c.sid?' · есть изменения':' · черновик'}`;
+    SFX.tick();if(!has)toast(c.sid?`Добавлено в «${c.name}». Нажми «Обновить в Spotify» в сборнике, чтобы сохранить.`:`Добавлено в «${c.name}»`);});
+}
+function closeComps(){if(cs.hidden)return;cs.classList.remove('show');setTimeout(()=>{cs.hidden=true;cs.innerHTML='';},RM?0:300);}
+async function editFromPreview(r){
+  let c=compBySid(r.sid);
+  if(!c){try{await ensureTracks(r);}catch(e){toast(apiErr(e));return;}c={cid:'c'+Date.now().toString(36),sid:r.sid,uri:r.uri,name:r.title,tpl:'label',bg:COMP_BG[0][0],pen:'blue',tracks:T(r).map(trackLite),dirty:false,updated:Date.now(),thumb:null,remoteCover:r.coverURL||null};comps.unshift(c);saveComps();}
+  closePreview();openComp(c);
+}
+$('#comp-btn').onclick=()=>openComps(null);
+function compKey(e){
+  if(!ca.hidden){if(e.key==='Escape')closeAdd();return true;}
+  if(!cs.hidden){if(e.key==='Escape')closeComps();return true;}
+  if(!ce.hidden){if(e.key==='Escape')closeComp();return true;}
+  return false;
+}
 
 /* ---------- mini player ---------- */
 function updateMini(){
@@ -1489,6 +2001,7 @@ function drawSnd(){
 $('#snd-btn').onclick=()=>{set.ui=!set.ui;LS.set('sv.ui',set.ui?'on':'off');drawSnd();const c=actx();if(c)AC.sfx.gain.setTargetAtTime(set.ui?1:0,c.currentTime,.02);SFX.beep();};
 document.addEventListener('keydown',e=>{
   if(!sheet.hidden){if(e.key==='Escape')closeSheet();return;}
+  if(compKey(e))return;
   if(!pvWrap.hidden){if(e.key==='Escape')closePreview();return;}
   const tag=(e.target.tagName||'').toLowerCase();if(tag==='input'||tag==='textarea'||tag==='select')return;
   if(!tt.hidden){poke();if(e.key==='Escape'){if(dr.open)closeDrawer();else closeTT();}else if(e.key===' '&&e.target.tagName!=='BUTTON'){mainAction();e.preventDefault();}return;}
@@ -1514,6 +2027,7 @@ setArm(86);drawSnd();
   try{await loadLibrary();}catch(e){if(e&&e.auth)return;toast(apiErr(e));}
   shelfMsg='';if(mode!=='search')renderShelf();else{$('#n-albums').textContent=lib.albums.length||'';$('#n-playlists').textContent=lib.playlists.length||'';}
   schedulePoll(50);
+  const ro=LS.get('sv.reopen','');if(ro){LS.del('sv.reopen');const c=compById(ro);if(c)openComp(c);}
 })();
 })();
 
