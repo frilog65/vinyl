@@ -1726,9 +1726,29 @@ function whenFonts(){if(fontsOk||!document.fonts)return Promise.resolve();
 const ce=$('#ce'),ca=$('#ca'),cs=$('#cs');
 let cur_c=null;
 function openComp(c){
-  cur_c=c;renderEditor();ce.hidden=false;
+  cur_c=c;renderEditor();ce.hidden=false;if(c.sid)syncComp(c);
   requestAnimationFrame(()=>requestAnimationFrame(()=>ce.classList.add('show')));
   whenFonts().then(()=>{if(cur_c===c)drawEditorArt();});
+}
+/* a saved compilation may have been changed on another device: compare with Spotify before editing */
+async function syncComp(c){
+  const note=$('#ce-note');if(note&&cur_c===c)note.textContent='Сверяю со Spotify…';
+  let remote=[],name=null;
+  try{
+    await pages(`/playlists/${c.sid}/items?limit=50`,j=>(j.items||[]).forEach(x=>{const t=x&&(x.item||x.track);if(t&&t.type==='track'&&!t.is_local&&t.uri)remote.push(trackLite(mapTrack(t)));}),40);
+    try{const j=await api(`/playlists/${c.sid}?fields=name`);name=j&&j.name||null;}catch(_){}
+  }catch(e){if(cur_c===c)drawSave();if(e&&e.status===404){toast('Этого плейлиста больше нет в Spotify');}return;}
+  if(cur_c!==c)return;
+  const same=remote.length===c.tracks.length&&remote.every((t,i)=>t.uri===c.tracks[i].uri)&&(!name||name===c.name);
+  const take=()=>{c.tracks=remote;if(name)c.name=name;c.dirty=false;saveComps();
+    const r=lib.playlists.find(x=>x.sid===c.sid);if(r){r.tracks=remote.map(t=>Object.assign({},t));r.total=remote.length;if(name)r.title=name;}
+    if(cur_c===c)renderEditorKeepScroll();};
+  if(same){drawSave();return;}
+  if(!c.dirty){take();toast('Подтянул изменения из Spotify');return;}
+  openSheet(`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sy-h"><div class="sheet-head"><h3 id="sy-h">Сборник менялся на другом устройстве</h3><button class="btn icon" type="button" data-close aria-label="Закрыть">${X}</button></div>
+    <p>В Spotify сейчас ${remote.length} ${plural(remote.length,'трек','трека','треков')}${name&&name!==c.name?` и название «${esc(name)}»`:''}. Здесь есть несохранённые изменения: ${c.tracks.length} ${plural(c.tracks.length,'трек','трека','треков')}.</p>
+    <div class="sheet-foot"><button class="btn" type="button" id="sy-mine">Оставить мои</button><button class="btn primary" type="button" id="sy-take">Взять из Spotify</button></div></div>`);
+  $('#sy-take').onclick=()=>{closeSheet();take();};$('#sy-mine').onclick=()=>{closeSheet();drawSave();};
 }
 function closeComp(){if(ce.hidden)return;closeAdd();ce.classList.remove('show');setTimeout(()=>{ce.hidden=true;ce.innerHTML='';cur_c=null;},RM?0:260);}
 function touch(c,cov){if(cov)c.coverDirty=true;c.dirty=true;c.updated=Date.now();saveComps();}
